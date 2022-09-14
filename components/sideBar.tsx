@@ -2,16 +2,12 @@ import { Fragment, useState } from 'react'
 import { Dialog, Menu, Transition } from '@headlessui/react'
 import {
     Bars3BottomLeftIcon,
-    BellIcon,
     CalendarIcon,
     ChartBarIcon,
     BoltIcon,
     HomeIcon,
-    InboxIcon,
-    UsersIcon,
     XMarkIcon,
 } from '@heroicons/react/24/outline'
-import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 
 
 const navigation = [
