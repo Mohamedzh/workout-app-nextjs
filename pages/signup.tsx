@@ -1,18 +1,41 @@
 import React from "react";
 import { NextPage } from "next";
-import { Fragment, useState } from 'react'
-import { Listbox, Transition } from '@headlessui/react'
-import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
+import { Fragment, useState } from "react";
+import { Listbox, Transition } from "@headlessui/react";
+import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 
 type Props = {};
 
 const Genders = [{ name: "Male" }, { name: "Female" }];
-
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
+
 const signup: NextPage = (props: Props) => {
   const [selected, setSelected] = useState(Genders[1]);
+  const formik = useFormik({
+    initialValues: {
+      firstName: "",
+      lastName: "",
+      email: "",
+      password: "",
+      // imageUrl: "",
+      weight: "",
+      height: "",
+      age: "",
+    },
+    // validationSchema: Yup.object({
+    //   title: Yup.string()
+    //     .min(8, "Must be 8 characters or more")
+    //     .required("Required"),
+    //   body: Yup.string().required("Required"),
+    // }),
+    onSubmit: (values) => {
+      const body = { ...values, selected };
+    },
+  });
   return (
     <div className='flex min-h-full h-screen'>
       <div className='flex flex-1 flex-col justify-center py-12 px-4 sm:px-6 lg:flex-none lg:px-20 xl:px-24'>
@@ -36,42 +59,48 @@ const signup: NextPage = (props: Props) => {
           <div className='mt-8'>
             <div className='mt-6'>
               <form action='#' method='POST' className='space-y-6'>
-                  <div >
                 <div>
-                  <label
-                    htmlFor='email'
-                    className='block text-sm font-medium text-gray-700'
-                  >
-                    First name
-                  </label>
-                  <div className='mt-1'>
-                    <input
-                      id='email'
-                      name='email'
-                      type='email'
-                      autoComplete='email'
-                      required
-                      className='block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm'
-                    />
-                  </div>
-                  <div className="">
+                  <div>
                     <label
                       htmlFor='email'
                       className='block text-sm font-medium text-gray-700'
                     >
-                      Last name
+                      First name
                     </label>
                     <div className='mt-1'>
                       <input
-                        id='email'
-                        name='email'
-                        type='email'
-                        autoComplete='email'
+                        id='firstName'
+                        name='firstName'
+                        type='text'
+                        autoComplete='firstName'
+                        value={formik.values.firstName}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
                         required
                         className='block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm'
                       />
                     </div>
-                  </div>
+                    <div className=''>
+                      <label
+                        htmlFor='email'
+                        className='block text-sm font-medium text-gray-700'
+                      >
+                        Last name
+                      </label>
+                      <div className='mt-1'>
+                        <input
+                          id='lastName'
+                          name='lastName'
+                          type='text'
+                          value={formik.values.lastName}
+                          onChange={formik.handleChange}
+                          onBlur={formik.handleBlur}
+                          autoComplete='lastName'
+                          required
+                          className='block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm'
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <div className='space-y-1'>
@@ -83,9 +112,12 @@ const signup: NextPage = (props: Props) => {
                   </label>
                   <div className='mt-1'>
                     <input
-                      id='password'
-                      name='password'
-                      type='password'
+                      id='email'
+                      name='email'
+                      type='email'
+                      value={formik.values.email}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
                       autoComplete='current-password'
                       required
                       className='block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm'
@@ -104,6 +136,9 @@ const signup: NextPage = (props: Props) => {
                       id='password'
                       name='password'
                       type='password'
+                      value={formik.values.password}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
                       autoComplete='current-password'
                       required
                       className='block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm'
@@ -139,7 +174,7 @@ const signup: NextPage = (props: Props) => {
                               leaveTo='opacity-0'
                             >
                               <Listbox.Options className='absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm'>
-                                {Genders.map((person, index) => (
+                                {Genders.map((gender, index) => (
                                   <Listbox.Option
                                     key={index}
                                     className={({ active }) =>
@@ -150,7 +185,7 @@ const signup: NextPage = (props: Props) => {
                                         "relative cursor-default select-none py-2 pl-3 pr-9"
                                       )
                                     }
-                                    value={person}
+                                    value={gender}
                                   >
                                     {({ selected, active }) => (
                                       <>
@@ -162,7 +197,7 @@ const signup: NextPage = (props: Props) => {
                                             "block truncate"
                                           )}
                                         >
-                                          {person.name}
+                                          {gender.name}
                                         </span>
 
                                         {selected ? (
@@ -200,12 +235,14 @@ const signup: NextPage = (props: Props) => {
                     >
                       Age
                     </label>
-
                     <div className='relative mt-1 flex items-center'>
                       <input
-                        type='text'
-                        name='search'
-                        id='search'
+                        type='number'
+                        name='age'
+                        id='age'
+                        value={formik.values.age}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
                         className='block w-full rounded-md border-gray-300 pr-12 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'
                       />
                       <div className='absolute inset-y-0 right-0 flex py-1.5 pr-1.5'>
@@ -215,7 +252,7 @@ const signup: NextPage = (props: Props) => {
                       </div>
                     </div>
                   </div>
-                  <div className="mx-3">
+                  <div className='mx-3'>
                     <label
                       htmlFor='search'
                       className='block text-sm font-medium text-gray-700'
@@ -225,9 +262,12 @@ const signup: NextPage = (props: Props) => {
 
                     <div className='relative mt-1 flex items-center'>
                       <input
-                        type='text'
-                        name='search'
-                        id='search'
+                        type='number'
+                        name='weight'
+                        id='weight'
+                        value={formik.values.weight}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
                         className='block w-full rounded-md border-gray-300 pr-12 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'
                       />
                       <div className='absolute inset-y-0 right-0 flex py-1.5 pr-1.5'>
@@ -247,9 +287,12 @@ const signup: NextPage = (props: Props) => {
 
                     <div className='relative mt-1 flex items-center'>
                       <input
-                        type='text'
-                        name='search'
-                        id='search'
+                        type='number'
+                        name='height'
+                        id='height'
+                        value={formik.values.height}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
                         className='block w-full rounded-md border-gray-300 pr-12 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'
                       />
                       <div className='absolute inset-y-0 right-0 flex py-1.5 pr-1.5'>
@@ -262,10 +305,11 @@ const signup: NextPage = (props: Props) => {
                 </div>
                 <div>
                   <button
-                    type='submit'
+                    type='button'
+                    onClick={() => formik.handleSubmit()}
                     className='bg-gray-900 flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2'
                   >
-                    Sign in
+                    Sign up
                   </button>
                 </div>
               </form>

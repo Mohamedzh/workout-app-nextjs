@@ -1,10 +1,25 @@
 import { NextPage } from "next";
 import React from "react";
-
+import { useFormik } from "formik";
 
 type Props = {};
 
 const login: NextPage = (props: Props) => {
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    // validationSchema: Yup.object({
+    //   title: Yup.string()
+    //     .min(8, "Must be 8 characters or more")
+    //     .required("Required"),
+    //   body: Yup.string().required("Required"),
+    // }),
+    onSubmit: (values) => {
+      
+    },
+  });
   return (
     <>
       <div className='flex min-h-full h-screen'>
@@ -31,7 +46,6 @@ const login: NextPage = (props: Props) => {
             </div>
 
             <div className='mt-8'>
-
               <div className='mt-6'>
                 <form action='#' method='POST' className='space-y-6'>
                   <div>
@@ -46,6 +60,9 @@ const login: NextPage = (props: Props) => {
                         id='email'
                         name='email'
                         type='email'
+                        value={formik.values.email}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
                         autoComplete='email'
                         required
                         className='block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm'
@@ -65,6 +82,9 @@ const login: NextPage = (props: Props) => {
                         id='password'
                         name='password'
                         type='password'
+                        value={formik.values.password}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
                         autoComplete='current-password'
                         required
                         className='block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm'
@@ -76,6 +96,7 @@ const login: NextPage = (props: Props) => {
                     <button
                       type='submit'
                       className='bg-gray-900 flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2'
+                      onClick={() => formik.handleSubmit()}
                     >
                       Sign in
                     </button>
