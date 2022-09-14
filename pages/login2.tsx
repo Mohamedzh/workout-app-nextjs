@@ -1,11 +1,11 @@
-// import { Auth } from '@supabase/ui'
+import { Auth } from '@supabase/ui'
 import { useUser } from '@supabase/auth-helpers-react'
 import { supabaseClient } from '@supabase/auth-helpers-nextjs'
 import { useEffect, useState } from 'react'
 
 const LoginPage = () => {
   const { user, error } = useUser()
-  const [data, setData] = useState()
+  const [data, setData] = useState<any>()
 
   useEffect(() => {
     async function loadData() {
@@ -20,8 +20,14 @@ const LoginPage = () => {
     return (
       <>
         {error && <p>{error.message}</p>}
+        <Auth
+          supabaseClient={supabaseClient}
+          providers={['google', 'github']}
+          socialLayout="horizontal"
+          socialButtonSize="xlarge"
+        />
         <h1>No User</h1>
-      
+
       </>
     )
 
