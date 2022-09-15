@@ -94,7 +94,9 @@ function workout({ workouts }: Props) {
   );
 }
 
-export default workout;
+export default workout
+
+// export const getServerSideProps = withPageAuth({ redirectTo: '/login' });
 
 export async function getStaticProps() {
   const workouts = await prisma.workout.findMany();
