@@ -37,7 +37,7 @@ const signup: NextPage = (props: Props) => {
     //   body: Yup.string().required("Required"),
     // }),
     onSubmit: (values) => {
-      signupUser(router, values.email)
+      signupUser(router, values.email, values.password)
       const body = { ...values, selected };
     },
   });
