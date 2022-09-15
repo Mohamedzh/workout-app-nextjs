@@ -1,10 +1,9 @@
-import React from 'react'
+import { NextPage } from 'next'
 import Header from '../components/header'
 import SideBar2 from '../components/sideBar'
 
-type Props = {}
+const Example: NextPage = () => {
 
-function progress({ }: Props) {
     return (
         <>
             <div>
@@ -17,6 +16,9 @@ function progress({ }: Props) {
                             </div>
                             <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
                                 {/* Replace with your content */}
+                                {/* <div className="py-4">
+                                    <div className="h-96 rounded-lg border-4 border-dashed border-gray-200" />
+                                </div> */}
                                 {/* /End replace */}
                             </div>
                         </div>
@@ -26,5 +28,4 @@ function progress({ }: Props) {
         </>
     )
 }
-
-export default progress
+export default Example
