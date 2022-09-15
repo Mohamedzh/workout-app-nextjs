@@ -1,9 +1,13 @@
 import { NextPage } from 'next'
 import Header from '../components/header'
 import SideBar2 from '../components/sideBar'
+import { withPageAuth } from '@supabase/auth-helpers-nextjs'
+import { User } from '@supabase/supabase-js';
 
-const Example: NextPage = () => {
 
+
+const Example: NextPage = ({ user }: { user?: User }) => {
+    console.log({user})
     return (
         <>
             <div>
@@ -15,11 +19,8 @@ const Example: NextPage = () => {
                             <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
                             </div>
                             <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
-                                {/* Replace with your content */}
-                                {/* <div className="py-4">
-                                    <div className="h-96 rounded-lg border-4 border-dashed border-gray-200" />
-                                </div> */}
-                                {/* /End replace */}
+                                <div><h1>Hello {user?.email}</h1></div>
+
                             </div>
                         </div>
                     </main>
@@ -29,3 +30,5 @@ const Example: NextPage = () => {
     )
 }
 export default Example
+
+export const getServerSideProps = withPageAuth({ redirectTo: '/login' })
