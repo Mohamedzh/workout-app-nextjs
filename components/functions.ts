@@ -1,3 +1,4 @@
+import { PrismaClient } from '@prisma/client'
 import { NextRouter } from 'next/router'
 import { supaBase } from './supabase'
 
@@ -15,3 +16,5 @@ export const loginUser = async (router: NextRouter, email: string, password: str
 export function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ')
 }
+
+// export const prisma = new PrismaClient();
