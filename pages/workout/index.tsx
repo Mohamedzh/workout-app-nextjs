@@ -2,11 +2,16 @@ import React from 'react'
 import Header from '../../components/header'
 import SideBar from '../../components/sideBar'
 import SideBar2 from '../../components/sideBar'
+import { withPageAuth } from '@supabase/auth-helpers-nextjs';
 
-type Props = {}
 
-function workout({ }: Props) {
+type Props = {
+    user: any
+}
+
+function workout({ user }: Props) {
     return (
+
         <>
             <div>
                 <SideBar2 />
@@ -18,6 +23,8 @@ function workout({ }: Props) {
                             </div>
                             <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
                                 {/* Replace with your content */}
+                                
+
                                 {/**map workouts */}
                                 {/* /End replace */}
                             </div>
@@ -30,3 +37,5 @@ function workout({ }: Props) {
 }
 
 export default workout
+
+export const getServerSideProps = withPageAuth({ redirectTo: '/login' });
