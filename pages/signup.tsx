@@ -5,6 +5,9 @@ import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { signupUser } from "../components/functions";
 
 type Props = {};
 
@@ -14,6 +17,7 @@ function classNames(...classes: string[]) {
 }
 
 const signup: NextPage = (props: Props) => {
+  const router = useRouter()
   const [selected, setSelected] = useState(Genders[1]);
   const formik = useFormik({
     initialValues: {
@@ -33,6 +37,7 @@ const signup: NextPage = (props: Props) => {
     //   body: Yup.string().required("Required"),
     // }),
     onSubmit: (values) => {
+      signupUser(router, values.email)
       const body = { ...values, selected };
     },
   });
@@ -47,12 +52,13 @@ const signup: NextPage = (props: Props) => {
             </h2>
             <p className='mt-2 text-sm text-gray-600'>
               Or{" "}
-              <a
-                href='#'
-                className='font-medium text-gray-900 hover:text-indigo-900'
-              >
-                sign in to an existing account
-              </a>
+              <Link href='/login'>
+                <a
+                  className='font-medium text-gray-900 hover:text-indigo-900'
+                >
+                  sign in to an existing account
+                </a>
+              </Link>
             </p>
           </div>
 
@@ -62,25 +68,25 @@ const signup: NextPage = (props: Props) => {
                 <div>
                   <div className="flex space-x-3">
                     <div>
-                    <label
-                      htmlFor='email'
-                      className='block text-sm font-medium text-gray-700'
-                    >
-                      First name
-                    </label>
-                    <div className='mt-1'>
-                      <input
-                        id='firstName'
-                        name='firstName'
-                        type='text'
-                        autoComplete='firstName'
-                        value={formik.values.firstName}
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        required
-                        className='block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm'
-                      />
-                    </div>
+                      <label
+                        htmlFor='email'
+                        className='block text-sm font-medium text-gray-700'
+                      >
+                        First name
+                      </label>
+                      <div className='mt-1'>
+                        <input
+                          id='firstName'
+                          name='firstName'
+                          type='text'
+                          autoComplete='firstName'
+                          value={formik.values.firstName}
+                          onChange={formik.handleChange}
+                          onBlur={formik.handleBlur}
+                          required
+                          className='block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm'
+                        />
+                      </div>
                     </div>
                     <div className=''>
                       <label

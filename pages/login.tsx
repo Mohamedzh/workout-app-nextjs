@@ -1,10 +1,15 @@
 import { NextPage } from "next";
 import React from "react";
 import { useFormik } from "formik";
+import { supaBase } from '../components/supabase'
+import { useRouter } from "next/router";
+import Link from "next/link";
+import { loginUser } from "../components/functions";
 
 type Props = {};
 
 const login: NextPage = (props: Props) => {
+  const router = useRouter()
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -17,7 +22,7 @@ const login: NextPage = (props: Props) => {
     //   body: Yup.string().required("Required"),
     // }),
     onSubmit: (values) => {
-      
+      loginUser(router, values.email, values.password)
     },
   });
   return (
@@ -36,12 +41,13 @@ const login: NextPage = (props: Props) => {
               </h2>
               <p className='mt-2 text-sm text-gray-600'>
                 Or{" "}
-                <a
-                  href='#'
-                  className='font-medium text-gray-900 hover:text-indigo-900'
-                >
-                  create new account
-                </a>
+                <Link href='/signup'>
+                  <a
+                    className='font-medium text-gray-900 hover:text-indigo-900'
+                  >
+                    create new account
+                  </a>
+                </Link>
               </p>
             </div>
 
@@ -94,7 +100,7 @@ const login: NextPage = (props: Props) => {
 
                   <div>
                     <button
-                      type='submit'
+                      type='button'
                       className='bg-gray-900 flex w-full justify-center rounded-md border border-transparent py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2'
                       onClick={() => formik.handleSubmit()}
                     >

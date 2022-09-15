@@ -1,10 +1,10 @@
 import React from 'react'
-import Header from '../components/header'
-import SideBar2 from '../components/sideBar'
+import Header from '../../components/header'
+import SideBar2 from '../../components/sideBar'
 
 type Props = {}
 
-function progress({ }: Props) {
+function workout({ }: Props) {
     return (
         <>
             <div>
@@ -17,6 +17,8 @@ function progress({ }: Props) {
                             </div>
                             <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
                                 {/* Replace with your content */}
+                                {/**map exercises for each workout from props */}
+
                                 {/* /End replace */}
                             </div>
                         </div>
@@ -26,5 +28,4 @@ function progress({ }: Props) {
         </>
     )
 }
-
-export default progress
+export default workout
