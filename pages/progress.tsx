@@ -1,6 +1,7 @@
+import { withPageAuth } from '@supabase/auth-helpers-nextjs'
 import React from 'react'
 import Header from '../components/header'
-import SideBar2 from '../components/sideBar'
+import SideBar from '../components/sideBar'
 
 type Props = {}
 
@@ -8,7 +9,7 @@ function progress({ }: Props) {
     return (
         <>
             <div>
-                <SideBar2 />
+                <SideBar />
                 <div className="flex flex-1 flex-col md:pl-64">
                     <Header />
                     <main className="flex-1">
@@ -28,3 +29,5 @@ function progress({ }: Props) {
 }
 
 export default progress
+
+export const getServerSideProps = withPageAuth({ redirectTo: '/login' })

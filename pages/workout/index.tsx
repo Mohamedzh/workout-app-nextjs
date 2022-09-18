@@ -4,6 +4,7 @@ import SideBar from "../../components/sideBar";
 import SideBar2 from "../../components/sideBar";
 import { Workout } from "../../types";
 import { prisma } from '../../db/index';
+import { withPageAuth } from "@supabase/auth-helpers-nextjs";
 
 type Props = { workouts: Workout[] };
 
@@ -96,9 +97,15 @@ function workout({ workouts }: Props) {
 
 export default workout
 
-// export const getServerSideProps = withPageAuth({ redirectTo: '/login' });
+export const getServerSideProps = withPageAuth({
+  redirectTo: '/login',
+  async getServerSideProps() {
+    const workouts = await prisma.workout.findMany();
+    return { props: { workouts } };
+  }
+});
 
-export async function getStaticProps() {
-  const workouts = await prisma.workout.findMany();
-  return { props: { workouts } };
-}
+// export async function getStaticProps() {
+//   const workouts = await prisma.workout.findMany();
+//   return { props: { workouts } };
+// }

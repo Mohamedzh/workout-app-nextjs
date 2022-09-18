@@ -30,16 +30,19 @@ const signup: NextPage = (props: Props) => {
       height: "",
       age: "",
     },
-    // validationSchema: Yup.object({
-    //   title: Yup.string()
-    //     .min(8, "Must be 8 characters or more")
-    //     .required("Required"),
-    //   body: Yup.string().required("Required"),
-    // }),
     onSubmit: (values) => {
       signupUser(router, values.email, values.password)
       const body = { ...values, selected };
     },
+    validationSchema: Yup.object({
+      firstName: Yup.string().required("Required"),
+      lastName: Yup.string().required("Required"),
+      email: Yup.string().required("Required"),
+      password: Yup.string().required("Required"),
+      age: Yup.string().required("Required"),
+      weight: Yup.string().required("Required"),
+      height: Yup.string().required("Required"),
+    }),
   });
   return (
     <div className='flex min-h-full h-screen'>
@@ -86,6 +89,7 @@ const signup: NextPage = (props: Props) => {
                           required
                           className='block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm'
                         />
+                        {formik.touched.firstName && formik.errors.firstName ? <p className="text-red-500 text-sm">{formik.errors.firstName}</p> : null}
                       </div>
                     </div>
                     <div className=''>
@@ -107,6 +111,8 @@ const signup: NextPage = (props: Props) => {
                           required
                           className='block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm'
                         />
+                        {formik.touched.lastName && formik.errors.lastName ? <p className="text-red-500 text-sm">{formik.errors.lastName}</p> : null}
+
                       </div>
                     </div>
                   </div>
@@ -130,6 +136,7 @@ const signup: NextPage = (props: Props) => {
                       required
                       className='block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm'
                     />
+                    {formik.touched.email && formik.errors.email ? <p className="text-red-500 text-sm">{formik.errors.email}</p> : null}
                   </div>
                 </div>
                 <div className='space-y-1'>
@@ -151,6 +158,7 @@ const signup: NextPage = (props: Props) => {
                       required
                       className='block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm'
                     />
+                    {formik.touched.password && formik.errors.password ? <p className="text-red-500 text-sm">{formik.errors.password}</p> : null}
                   </div>
                 </div>
                 <div className='flex justify-center'>
@@ -259,6 +267,7 @@ const signup: NextPage = (props: Props) => {
                         </kbd>
                       </div>
                     </div>
+                    {formik.touched.age && formik.errors.age ? <p className="text-red-500 text-sm">{formik.errors.age}</p> : null}
                   </div>
                   <div className='mx-3'>
                     <label
@@ -284,6 +293,7 @@ const signup: NextPage = (props: Props) => {
                         </kbd>
                       </div>
                     </div>
+                    {formik.touched.weight && formik.errors.weight ? <p className="text-red-500 text-sm">{formik.errors.weight}</p> : null}
                   </div>
                   <div>
                     <label
@@ -309,6 +319,7 @@ const signup: NextPage = (props: Props) => {
                         </kbd>
                       </div>
                     </div>
+                    {formik.touched.height && formik.errors.height ? <p className="text-red-500 text-sm">{formik.errors.height}</p> : null}
                   </div>
                 </div>
                 <div>

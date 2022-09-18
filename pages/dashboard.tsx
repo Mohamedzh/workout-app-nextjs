@@ -1,9 +1,4 @@
 /*
-  This example requires Tailwind CSS v2.0+ 
-  
-  This example requires some changes to your config:
-  
-  ```
   // tailwind.config.js
   const colors = require('tailwindcss/colors')
   
@@ -25,7 +20,7 @@
 */
 import { Fragment, useState } from 'react'
 import Header from "../components/header";
-import SideBar2 from "../components/sideBar";
+import SideBar from "../components/sideBar";
 import {
   ClockIcon,
   CogIcon,
@@ -66,6 +61,7 @@ const cards = [
 const transactions = [
   {
     id: 1,
+    number:1,
     name: 'Payment to Molly Sanders',
     href: '#',
     amount: '$20,000',
@@ -91,7 +87,7 @@ export default function Example() {
 
   return (
     <>
-      <SideBar2/>
+      <SideBar/>
       <div className="min-h-full">
         <div className="flex flex-1 flex-col lg:pl-64">
         <Header/>

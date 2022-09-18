@@ -3,11 +3,15 @@ import Header from '../components/header'
 import SideBar2 from '../components/sideBar'
 import { withPageAuth } from '@supabase/auth-helpers-nextjs'
 import { User } from '@supabase/supabase-js';
+import { useEffect } from 'react';
 
 
 
 const Example: NextPage = ({ user }: { user?: User }) => {
     console.log({user})
+    // useEffect(()=>{if (!user){
+    //     alert('signedout')
+    // }}, [user])
     return (
         <>
             <div>
