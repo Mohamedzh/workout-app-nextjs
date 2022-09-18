@@ -1,9 +1,13 @@
-import React, { Fragment, useState } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import {
     Bars3BottomLeftIcon,
 } from '@heroicons/react/24/outline'
-import { classNames } from './functions'
+import { classNames, signOut } from './functions'
+import { useRouter } from 'next/router'
+import { useUser } from '@supabase/auth-helpers-react'
+import { addUser } from '../redux/slices/userSlice'
+import { useDispatch } from 'react-redux'
 
 const userNavigation = [
     { name: 'Your Profile', href: '#' },
@@ -14,7 +18,17 @@ const userNavigation = [
 type Props = {}
 
 function Header({ }: Props) {
+    const dispatch = useDispatch()
+    const user = useUser()
+
     const [sidebarOpen, setSidebarOpen] = useState(false)
+    const router = useRouter()
+    useEffect(() => {
+        console.log(user)
+        // if(user){
+        //     dispatch(addUser(user))
+        // }
+    }, [])
 
     return (
         <div className="sticky top-0 z-10 flex h-16 flex-shrink-0 bg-white shadow">
@@ -55,6 +69,7 @@ function Header({ }: Props) {
                                     <Menu.Item key={item.name}>
                                         {({ active }) => (
                                             <a
+                                                onClick={() => signOut(router)}
                                                 href={item.href}
                                                 className={classNames(
                                                     active ? 'bg-gray-100' : '',
