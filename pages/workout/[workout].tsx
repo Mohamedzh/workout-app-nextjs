@@ -4,7 +4,7 @@ import Header from "../../components/header";
 import SideBar from "../../components/sideBar";
 import SideBar2 from "../../components/sideBar";
 import { prisma } from "../../db/index";
-import workout from './index';
+import workout from "./index";
 
 const products = [
   {
@@ -96,27 +96,29 @@ function Workout({ target }: { target: Exercise[] }) {
 export default Workout;
 
 export async function getStaticPaths() {
-  console.log("hello world");
   const workouts = await prisma.workout.findMany();
-  console.log({ workouts });
+  const paths = workouts.map((item) => ({
+    params: { workout: item.id.toString() },
+  }));
+  console.log(paths);
   return {
-    paths: workouts.map((item) => ({
-      params: {
-        workout: item.id.toString(),
-      },
-    })),
+    paths,
     fallback: false,
   };
 }
 
-export async function getStaticProps({ params }: { params: { workout: string } }) {
-  console.log("inside", { params });
+export async function getStaticProps({
+  params,
+}: {
+  params: { workout: string };
+}) {
+  //   console.log("inside", { params });
   const exercises = await prisma.workoutLine.findMany();
-  const currentExercises = exercises.filter((line) => {
-    line.workoutId === +params.workout;
-  });
+  const currentExercises = exercises.filter(
+    (line) => line.workoutId === +params.workout
+  );
   let target: Exercise[] = [];
-  console.log({ exercises, currentExercises, target });
+  //   console.log({ exercises, currentExercises, target });
   for (let i = 0; i < currentExercises.length; i++) {
     const x = await prisma.exercise.findFirst({
       where: { id: currentExercises[i].exerciseId },

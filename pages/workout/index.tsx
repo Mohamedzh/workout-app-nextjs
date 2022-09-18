@@ -95,7 +95,7 @@ function workout({ workouts }: Props) {
   );
 }
 
-export default workout
+export default workout;
 
 export const getServerSideProps = withPageAuth({
   redirectTo: '/login',
