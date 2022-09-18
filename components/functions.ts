@@ -17,7 +17,7 @@ export const signupUser = async (router: NextRouter, email: string, password: st
 export const loginUser = async (router: NextRouter, email: string, password: string) => {
     const res = await supabaseClient.auth.signIn({ email, password, }, { redirectTo: '/' })
     console.log(res)
-    router.push('/test')
+    router.push('/')
     // alert('user logged in')
 }
 
