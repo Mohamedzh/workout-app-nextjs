@@ -82,7 +82,7 @@ const statusStyles = {
   failed: 'bg-gray-100 text-gray-800',
 }
 
-function classNames(...classes: any) {
+function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
@@ -190,7 +190,7 @@ export default function Example() {
                             <span className="flex flex-col truncate text-sm text-gray-500">
                               <span className="truncate">{transaction.name}</span>
                               <span>
-                                <span className="font-medium text-gray-900">{transaction.number}</span>{' '}
+                                <span className="font-medium text-gray-900">{transaction.amount}</span>{' '}
                                 {transaction.currency}
                               </span>
                               <time dateTime={transaction.datetime}>{transaction.date}</time>
@@ -275,7 +275,7 @@ export default function Example() {
                                 </div>
                               </td>
                               <td className="whitespace-nowrap px-6 py-4 text-right text-sm text-gray-500">
-                                <span className="font-medium text-gray-900">{transaction.number}</span>
+                                <span className="font-medium text-gray-900">{transaction.amount}</span>
                                 {transaction.currency}
                               </td>
                               <td className="hidden whitespace-nowrap px-6 py-4 text-sm text-gray-500 md:block">

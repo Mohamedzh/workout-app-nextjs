@@ -3,7 +3,7 @@ import Header from "../../components/header";
 import SideBar from "../../components/sideBar";
 import SideBar2 from "../../components/sideBar";
 import { Workout } from "../../types";
-import { prisma } from '../../db/index';
+import { prisma } from "../../db/index";
 
 type Props = { workouts: Workout[] };
 
@@ -94,11 +94,13 @@ function workout({ workouts }: Props) {
   );
 }
 
-export default workout
+export default workout;
 
 // export const getServerSideProps = withPageAuth({ redirectTo: '/login' });
 
 export async function getStaticProps() {
   const workouts = await prisma.workout.findMany();
-  return { props: { workouts } };
+  return {
+    props: { workouts },
+  };
 }
