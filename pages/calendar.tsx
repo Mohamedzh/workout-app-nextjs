@@ -5,18 +5,17 @@ import Header from "../components/header";
 import SideBar from "../components/sideBar";
 
 export default function CalendarPage() {
-
   return (
     <>
       <div>
         <SideBar />
-        <div className="flex flex-1 flex-col md:pl-64">
+        <div className='flex flex-1 flex-col md:pl-64'>
           <Header />
-          <main className="flex-1">
-            <div className="py-6 bg-slate-200 h-screen">
-              <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
-              </div>
-              <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
+          <main className='flex-1'>
+            <div className='py-6 bg-slate-200 h-screen'>
+              <div className='mx-auto max-w-7xl px-4 sm:px-6 md:px-8'></div>
+
+              <div className='mx-auto max-w-7xl px-4 sm:px-6 md:px-8'>
                 <Calendar />
               </div>
             </div>
@@ -27,5 +26,4 @@ export default function CalendarPage() {
   );
 }
 
-export const getServerSideProps = withPageAuth({ redirectTo: '/login' })
-
+export const getServerSideProps = withPageAuth({ redirectTo: "/login" });
