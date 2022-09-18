@@ -4,6 +4,7 @@ import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/20/solid";
 import { Menu, Transition } from "@headlessui/react";
 import { EllipsisVerticalIcon } from "@heroicons/react/24/outline";
 
+
 const days = [
   { date: "2021-12-27" },
   { date: "2021-12-28" },
@@ -68,111 +69,80 @@ function classNames(...classes: any) {
 
 export default function Calendar() {
   return (
-    <div className='md:grid md:grid-cols-2 md:divide-x md:divide-gray-300'>
+    <div className='md:grid md:divide-x  md:divide-gray-300'>
       <section className='mt-12 md:mt-0 md:pl-14'>
-        <h2 className='font-semibold text-gray-900'>
-          Schedule for <time dateTime='2022-01-21'>January 21, 2022</time>
-        </h2>
-        <ol className='mt-4 space-y-1 text-sm leading-6 text-gray-500'>
-          {meetings.map((meeting) => (
-            <li
-              key={meeting.id}
-              className='group flex items-center space-x-4 rounded-xl py-2 px-4 focus-within:bg-gray-100 hover:bg-gray-100'
-            >
-              <img
-                src={meeting.imageUrl}
-                alt=''
-                className='h-10 w-10 flex-none rounded-full'
-              />
-              <div className='flex-auto'>
-                <p className='text-gray-900'>{meeting.name}</p>
-                <p className='mt-0.5'>
-                  <time dateTime={meeting.startDatetime}>{meeting.start}</time>{" "}
-                  - <time dateTime={meeting.endDatetime}>{meeting.end}</time>
-                </p>
-              </div>
-              <Menu
-                as='div'
-                className='relative opacity-0 focus-within:opacity-100 group-hover:opacity-100'
-              >
-                <div>
-                  <Menu.Button className='-m-2 flex items-center rounded-full p-1.5 text-gray-500 hover:text-gray-600'>
-                    <span className='sr-only'>Open options</span>
-                    <EllipsisVerticalIcon
-                      className='h-6 w-6'
-                      aria-hidden='true'
-                    />
-                  </Menu.Button>
-                </div>
+        <Menu
+          as='div'
+          className='relative opacity-0 focus-within:opacity-100 group-hover:opacity-100'
+        >
+          <div>
+            <Menu.Button className='-m-2 flex items-center rounded-full p-1.5 text-gray-500 hover:text-gray-600'>
+              <span className='sr-only'>Open options</span>
+              <EllipsisVerticalIcon className='h-6 w-6' aria-hidden='true' />
+            </Menu.Button>
+          </div>
 
-                <Transition
-                  as={Fragment}
-                  enter='transition ease-out duration-100'
-                  enterFrom='transform opacity-0 scale-95'
-                  enterTo='transform opacity-100 scale-100'
-                  leave='transition ease-in duration-75'
-                  leaveFrom='transform opacity-100 scale-100'
-                  leaveTo='transform opacity-0 scale-95'
-                >
-                  <Menu.Items className='absolute right-0 z-10 mt-2 w-36 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none'>
-                    <div className='py-1'>
-                      <Menu.Item>
-                        {({ active }) => (
-                          <a
-                            href='#'
-                            className={classNames(
-                              active
-                                ? "bg-gray-100 text-gray-900"
-                                : "text-gray-700",
-                              "block px-4 py-2 text-sm"
-                            )}
-                          >
-                            Edit
-                          </a>
-                        )}
-                      </Menu.Item>
-                      <Menu.Item>
-                        {({ active }) => (
-                          <a
-                            href='#'
-                            className={classNames(
-                              active
-                                ? "bg-gray-100 text-gray-900"
-                                : "text-gray-700",
-                              "block px-4 py-2 text-sm"
-                            )}
-                          >
-                            Cancel
-                          </a>
-                        )}
-                      </Menu.Item>
-                    </div>
-                  </Menu.Items>
-                </Transition>
-              </Menu>
-            </li>
-          ))}
-        </ol>
+          <Transition
+            as={Fragment}
+            enter='transition ease-out duration-100'
+            enterFrom='transform opacity-0 scale-95'
+            enterTo='transform opacity-100 scale-100'
+            leave='transition ease-in duration-75'
+            leaveFrom='transform opacity-100 scale-100'
+            leaveTo='transform opacity-0 scale-95'
+          >
+            <Menu.Items className='absolute right-0 z-10 mt-2 w-36 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none'>
+              <div className='py-1'>
+                <Menu.Item>
+                  {({ active }) => (
+                    <a
+                      href='#'
+                      className={classNames(
+                        active ? "bg-gray-100 text-gray-900" : "text-gray-700",
+                        "block px-4 py-2 text-sm"
+                      )}
+                    >
+                      Edit
+                    </a>
+                  )}
+                </Menu.Item>
+                <Menu.Item>
+                  {({ active }) => (
+                    <a
+                      href='#'
+                      className={classNames(
+                        active ? "bg-gray-100 text-gray-900" : "text-gray-700",
+                        "block px-4 py-2 text-sm"
+                      )}
+                    >
+                      Cancel
+                    </a>
+                  )}
+                </Menu.Item>
+              </div>
+            </Menu.Items>
+          </Transition>
+        </Menu>
       </section>
-      <div className="hidden max-w-md flex-none border-l border-gray-100 py-10 px-8 md:block">
-        <div className="flex items-center text-center text-gray-900">
+      <div className='hidden max-w-md flex-none border-l border-gray-100 py-10 px-8 md:block'>
+        <div className='flex items-center text-center text-gray-900'>
           <button
-            type="button"
-            className="-m-1.5 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500"
+            type='button'
+            className='-m-1.5 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500'
           >
-            <span className="sr-only">Previous month</span>
-            <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
+            <span className='sr-only'>Previous month</span>
+            <ChevronLeftIcon className='h-5 w-5' aria-hidden='true' />
           </button>
-          <div className="flex-auto font-semibold">January 2022</div>
+          <div className='flex-auto font-semibold'>January 2022</div>
           <button
-            type="button"
-            className="-m-1.5 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500"
+            type='button'
+            className='-m-1.5 flex flex-none items-center justify-center p-1.5 text-gray-400 hover:text-gray-500'
           >
-            <span className="sr-only">Next month</span>
-            <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
+            <span className='sr-only'>Next month</span>
+            <ChevronRightIcon className='h-5 w-5' aria-hidden='true' />
           </button>
         </div>
-        <div className="mt-6 grid grid-cols-7 text-center text-xs leading-6 text-gray-500">
+        <div className='mt-6 grid grid-cols-7 text-center text-xs leading-6 text-gray-500'>
           <div>M</div>
           <div>T</div>
           <div>W</div>
@@ -181,40 +151,45 @@ export default function Calendar() {
           <div>S</div>
           <div>S</div>
         </div>
-        <div className="isolate mt-2 grid grid-cols-7 gap-px rounded-lg bg-gray-200 text-sm shadow ring-1 ring-gray-200">
+        <div className='isolate mt-2 grid grid-cols-7 gap-px rounded-lg bg-gray-200 text-sm shadow ring-1 ring-gray-200'>
           {days.map((day, dayIdx) => (
             <button
               key={day.date}
-              type="button"
+              type='button'
               className={classNames(
-                'py-1.5 hover:bg-gray-100 focus:z-10',
-                day.isCurrentMonth ? 'bg-white' : 'bg-gray-50',
-                (day.isSelected || day.isToday) && 'font-semibold',
-                day.isSelected && 'text-white',
-                !day.isSelected && day.isCurrentMonth && !day.isToday && 'text-gray-900',
-                !day.isSelected && !day.isCurrentMonth && !day.isToday && 'text-gray-400',
-                day.isToday && !day.isSelected && 'text-indigo-600',
-                dayIdx === 0 && 'rounded-tl-lg',
-                dayIdx === 6 && 'rounded-tr-lg',
-                dayIdx === days.length - 7 && 'rounded-bl-lg',
-                dayIdx === days.length - 1 && 'rounded-br-lg'
+                "py-1.5 hover:bg-gray-100 focus:z-10",
+                day.isCurrentMonth ? "bg-white" : "bg-gray-50",
+                (day.isSelected || day.isToday) && "font-semibold",
+                day.isSelected && "text-white",
+                !day.isSelected &&
+                  day.isCurrentMonth &&
+                  !day.isToday &&
+                  "text-gray-900",
+                !day.isSelected &&
+                  !day.isCurrentMonth &&
+                  !day.isToday &&
+                  "text-gray-400",
+                day.isToday && !day.isSelected && "text-indigo-600",
+                dayIdx === 0 && "rounded-tl-lg",
+                dayIdx === 6 && "rounded-tr-lg",
+                dayIdx === days.length - 7 && "rounded-bl-lg",
+                dayIdx === days.length - 1 && "rounded-br-lg"
               )}
             >
               <time
                 dateTime={day.date}
                 className={classNames(
-                  'mx-auto flex h-7 w-7 items-center justify-center rounded-full',
-                  day.isSelected && day.isToday && 'bg-indigo-600',
-                  day.isSelected && !day.isToday && 'bg-gray-900'
+                  "mx-auto flex h-7 w-7 items-center justify-center rounded-full",
+                  day.isSelected && day.isToday && "bg-indigo-600",
+                  day.isSelected && !day.isToday && "bg-gray-900"
                 )}
               >
-                {day.date.split('-').pop()?.replace(/^0/, '')}
+                {day.date.split("-").pop()?.replace(/^0/, "")}
               </time>
             </button>
           ))}
         </div>
       </div>
-
     </div>
   );
 }
