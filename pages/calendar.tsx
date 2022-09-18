@@ -1,14 +1,15 @@
+import { withPageAuth } from "@supabase/auth-helpers-nextjs";
 import { Fragment, useState } from "react";
 import Calendar from "../components/calendar";
 import Header from "../components/header";
-import SideBar2 from "../components/sideBar";
+import SideBar from "../components/sideBar";
 
 export default function CalendarPage() {
 
   return (
     <>
       <div>
-        <SideBar2 />
+        <SideBar />
         <div className="flex flex-1 flex-col md:pl-64">
           <Header />
           <main className="flex-1">
@@ -25,3 +26,6 @@ export default function CalendarPage() {
     </>
   );
 }
+
+export const getServerSideProps = withPageAuth({ redirectTo: '/login' })
+

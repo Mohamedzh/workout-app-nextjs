@@ -1,7 +1,7 @@
-import { Auth, Typography, Button } from "@supabase/ui";
+import { useUser } from "@supabase/auth-helpers-react";
 import { createClient } from "@supabase/supabase-js";
+import { loginUser } from "../components/functions";
 
-const { Text } = Typography
 
 // Create a single supabase client for interacting with your database
 const supabase = createClient(
@@ -10,14 +10,14 @@ const supabase = createClient(
 );
 
 const Container = (props: any) => {
-    const { user } = Auth.useUser();
+    const { user } = useUser();
     if (user)
         return (
             <>
-                <Text>Signed in: {user.email}</Text>
-                <Button block onClick={() => props.supabaseClient.auth.signOut()}>
+                <p>Signed in: {user.email}</p>
+                <button onClick={() => props.supabaseClient.auth.signOut()}>
                     Sign out
-                </Button>
+                </button>
             </>
         );
     return props.children;
@@ -25,10 +25,13 @@ const Container = (props: any) => {
 
 export default function Home() {
     return (
-        <Auth.UserContextProvider supabaseClient={supabase}>
-            <Container supabaseClient={supabase}>
-                <Auth providers={['facebook', 'github']} supabaseClient={supabase} />
-            </Container>
-        </Auth.UserContextProvider>
+
+        // <Auth.UserContextProvider supabaseClient={supabase}>
+        <Container supabaseClient={supabase}>
+            <h1>LoggedOut</h1>
+            {/* <button onClick={()=>loginUser()}>SignIn</button> */}
+            {/* <Auth providers={['facebook', 'github']} supabaseClient={supabase} /> */}
+        </Container>
+        // </Auth.UserContextProvider>
     );
 };
