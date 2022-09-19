@@ -1,6 +1,6 @@
 import { useUser } from "@supabase/auth-helpers-react";
 import { createClient } from "@supabase/supabase-js";
-import { loginUser } from "../components/functions";
+import { loginUser } from "../lib/functions";
 
 
 // Create a single supabase client for interacting with your database

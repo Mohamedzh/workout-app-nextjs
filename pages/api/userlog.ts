@@ -4,19 +4,21 @@ import { prisma } from "../../db/index";
 
 export default async function sendUserLog(req: NextApiRequest, res: NextApiResponse) {
     try {
-        const { data } = req.body
+        const { workoutLineId, reps, step, weights } = req.body
         const current = await getUser({ req, res })
-        const userLog = await prisma.userLog.create({
+        console.log(req.body, current.user.id)
+        await prisma.userLog.create({
             data: {
                 userId: current.user.id,
-                workoutLineId: data.workoutLineId,
-                reps: data.reps,
-                step: data.step,
-                weights: data.weights
+                workoutLineId,
+                reps,
+                step,
+                weights
             }
         })
         res.status(201).send('new user log created')
     } catch (error) {
         console.log(error)
+        res.status(500).send(error)
     }
 }

@@ -50,16 +50,20 @@ function workout({ workouts }: Props) {
         <SideBar />
         <div className='flex flex-1 flex-col md:pl-64'>
           <Header />
-          <main className='flex-1'>
-            <div className='py-6 bg-slate-200 h-screen'>
+          <main className='flex-1  bg-slate-200 h-screen'>
+            <div className=''>
               <div className='mx-auto max-w-7xl px-4 sm:px-6 md:px-8'></div>
               <div className='mx-auto max-w-7xl px-4 sm:px-6 md:px-8'>
-                <div className='bg-white'>
+
+                <div className='bg-slate-200'>
                   <div className='mx-auto max-w-2xl py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8'>
+                    <div className="mb-10 grid justify-items-center">
+                      <p className='text-4xl font-black'>Browse our carefully curated exercises</p>
+                      <p className="text-lg text-gray-500 font-bold mt-3">Thoughtfully designed exercises meant to push you to the absolute limits</p>
+                    </div>
                     <h2 id='products-heading' className='sr-only'>
                       Products
                     </h2>
-
                     <div className='grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8'>
                       {workouts.map((product) => (
                         <Link href={product.href} key={product.id}>

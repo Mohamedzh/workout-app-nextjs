@@ -14,7 +14,7 @@ import {
   CheckCircleIcon,
   ChevronRightIcon,
 } from '@heroicons/react/20/solid'
-import { classNames } from './functions'
+import { classNames } from '../lib/functions'
 import { useRouter } from 'next/router'
 
 const navigation = [
