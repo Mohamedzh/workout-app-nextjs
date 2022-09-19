@@ -1,10 +1,22 @@
-import { withPageAuth } from "@supabase/auth-helpers-nextjs";
-import { Fragment, useState } from "react";
+// import { UserLog } from "@prisma/client";
+import { UserLog } from "@prisma/client";
+import { User, withPageAuth } from "@supabase/auth-helpers-nextjs";
 import Calendar from "../components/calendar";
 import Header from "../components/header";
 import SideBar from "../components/sideBar";
+import { prisma } from "../db/index";
+import { getUser } from "@supabase/auth-helpers-nextjs";
+import { NextApiRequest, NextApiResponse } from "next";
+import axios from "axios";
 
-export default function CalendarPage() {
+export default function CalendarPage({
+  updatedLog,
+  user,
+}: {
+  updatedLog: UserLog[];
+  user: User;
+}) {
+  console.log(updatedLog);
   return (
     <>
       <div>
@@ -14,9 +26,8 @@ export default function CalendarPage() {
           <main className='flex-1  bg-slate-200 h-screen'>
             <div className='py-6'>
               <div className='mx-auto max-w-7xl px-4 sm:px-6 md:px-8'></div>
-
               <div className='mx-auto max-w-7xl px-4 sm:px-6 md:px-8'>
-                <Calendar />
+                <Calendar updatedLog={updatedLog} />
               </div>
             </div>
           </main>
@@ -26,4 +37,19 @@ export default function CalendarPage() {
   );
 }
 
-export const getServerSideProps = withPageAuth({ redirectTo: "/login" });
+export const getServerSideProps = withPageAuth({
+  redirectTo: "/login",
+  async getServerSideProps() {
+    const WorkoutLog = await prisma?.userLog.findMany();
+    const updatedLog = WorkoutLog.map((item) => {
+      return {
+        ...item,
+        createdAt: item.createdAt.getTime(),
+        updatedAt: item.updatedAt.getTime(),
+      };
+    });
+    const workoutlines = await prisma.workoutLine.findMany();
+
+    return { props: { updatedLog } };
+  },
+});
