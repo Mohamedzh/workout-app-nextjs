@@ -1,15 +1,18 @@
-import { PrismaClient } from '@prisma/client'
+import { Exercise, PrismaClient, WorkoutLine } from '@prisma/client'
 import { NextRouter } from 'next/router'
 import { supaBase } from './supabase'
 import axios from 'axios'
 import { supabaseClient } from '@supabase/auth-helpers-nextjs'
+import { Dispatch } from '@reduxjs/toolkit'
+import { addExercises } from '../redux/slices/exerciseSlice'
+import { SignUp } from '../types'
 
 
-export const signupUser = async (router: NextRouter, email: string, password: string) => {
+export const signupUser = async (router: NextRouter, email: string, password: string, body: SignUp) => {
     const res = await supabaseClient.auth.signUp({ email, password }, { redirectTo: '/login', data: { name: "miiiuiu" } })
     console.log({ res })
     const res2 = await supabaseClient.auth.signIn({ email, password, }, { redirectTo: '/' })
-    await axios.get("/api/moustafa")
+    await axios.post("/api/signup", body)
     router.push('/')
 
 }
@@ -39,3 +42,20 @@ export function classNames(...classes: string[]) {
 }
 
 // export const prisma = new PrismaClient();
+
+// export const getExercise = async (dispatch: Dispatch) => {
+//     try {
+//         const res = await axios.get("http://localhost:3000/api/exerciseLine")
+//         console.log('function')
+//         console.log(res.data)
+//         dispatch(addExercises(res.allExerciseLines))
+//     } catch (error) {
+//         console.log(error)
+//     }
+// }
+
+export const addUserLog = async (set, lineId: string) => {
+    const data = { step: set.index, rec: set.rec, weights: set.weights, workoutLineId: lineId }
+    const res = await axios.post("/api/userlog", data)
+
+}

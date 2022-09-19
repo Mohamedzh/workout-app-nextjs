@@ -18,7 +18,7 @@ function classNames(...classes: string[]) {
 
 const signup: NextPage = (props: Props) => {
   const router = useRouter()
-  const [selected, setSelected] = useState(Genders[1]);
+  const [selected, setSelected] = useState(Genders[0]);
   const formik = useFormik({
     initialValues: {
       firstName: "",
@@ -31,8 +31,8 @@ const signup: NextPage = (props: Props) => {
       age: "",
     },
     onSubmit: (values) => {
-      signupUser(router, values.email, values.password)
-      const body = { ...values, selected };
+      const body = { ...values, gender:selected.name };
+      signupUser(router, values.email, values.password, body)
     },
     validationSchema: Yup.object({
       firstName: Yup.string().required("Required"),

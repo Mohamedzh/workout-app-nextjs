@@ -1,7 +1,13 @@
+import { Exercise } from '@prisma/client';
 import React from 'react';
 import YouTube, { YouTubeProps } from 'react-youtube';
 
-const Player = () => {
+const Player = ({
+    currentExercise, setArray
+}: {
+    currentExercise: Exercise,
+    setArray: { reps: string, weight: string }[]
+}) => {
     const onPlayerReady: YouTubeProps['onReady'] = (event) => {
         // access to player in all event handlers via event.target
         event.target.pauseVideo();
@@ -16,6 +22,17 @@ const Player = () => {
         },
     };
 
-    return <YouTube videoId="2g811Eo7K8U" opts={opts} onReady={onPlayerReady} />;
+    return (
+        <div className='flex'>
+            <div>
+                <YouTube videoId={currentExercise.videoUrl} opts={opts} onReady={onPlayerReady} />
+            </div>
+            <div className='mx-10'>
+                <p className='text-2xl font-black'>{currentExercise.name}</p>
+                <p className='my-3'>{setArray.length} Sets X {setArray[0].reps} Reps</p>
+                <p>{currentExercise.description}</p>
+            </div>
+        </div>
+    );
 }
 export default Player
