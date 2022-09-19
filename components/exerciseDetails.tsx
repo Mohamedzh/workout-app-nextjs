@@ -1,49 +1,27 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useLayoutEffect, useRef, useState } from 'react'
 import { CountdownCircleTimer } from 'react-countdown-circle-timer'
-import { classNames } from './functions'
+import { addUserLog, classNames } from './functions'
 
-const people = [
-    {
-        name: 'Lindsay Walton',
-        title: 'Front-end Developer',
-        email: 'lindsay.walton@example.com',
-        role: 'Member',
-    },
-    // More people...
-]
+type Props = {
+    setArray: { reps: string, weight: string, disabled: boolean }[]
+    lineId: string
+}
 
-
-type Props = {}
-
-function ExerciseDetails({ }: Props) {
-    const checkbox = useRef()
+function ExerciseDetails({ setArray, lineId }: Props) {
     const [start, setStart] = useState<boolean>(false)
+    const [startButton, setStartButton] = useState<string>("Start Timer")
+
     const [checked, setChecked] = useState<boolean>(false)
-    const [indeterminate, setIndeterminate] = useState<boolean>(false)
-    const [selectedPeople, setSelectedPeople] = useState([])
+    const [selectedSet, setSelectedSet] = useState<{ reps: string, weight: string }>()
 
-    useLayoutEffect(() => {
-        const isIndeterminate = selectedPeople.length > 0 && selectedPeople.length < people.length
-        setChecked(selectedPeople.length === people.length)
-        setIndeterminate(isIndeterminate)
-        checkbox.current.indeterminate = isIndeterminate
-    }, [selectedPeople])
-
-    function toggleAll() {
-        setSelectedPeople(checked || indeterminate ? [] : people)
-        setChecked(!checked && !indeterminate)
-        setIndeterminate(false)
-    }
+    useEffect(() => { setStartButton(start ? "Stop" : "Start Timer") }, [start])
 
     return (
         <div className="px-4 sm:px-6 lg:px-8">
             <div className="sm:flex sm:items-center">
                 <div className="sm:flex-auto">
                     <h1 className="text-xl font-semibold text-gray-900">Log Workout</h1>
-                    {/* <p className="mt-2 text-sm text-gray-700">
-                        A list of all the users in your account including their name, title, email and role.
-                    </p> */}
                 </div>
                 {/* <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
                     <button
@@ -59,7 +37,7 @@ function ExerciseDetails({ }: Props) {
                     <div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
                         <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
                             <div className="relative overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
-                                {/* {selectedPeople.length > 0 && (
+                                {/* {selectedSets.length > 0 && (
                                 <div className="absolute top-0 left-12 flex h-12 items-center space-x-3 bg-gray-50 sm:left-16">
                                     <button
                                         type="button"
@@ -88,74 +66,55 @@ function ExerciseDetails({ }: Props) {
                                                 Reps
                                             </th>
                                             <th scope="col" className="relative w-12 px-6 sm:w-16 sm:px-8">
-                                                <input
-                                                    type="checkbox"
-                                                    className="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 sm:left-6"
-                                                    ref={checkbox}
-                                                    checked={checked}
-                                                    onChange={toggleAll}
-                                                />
                                             </th>
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-gray-200 bg-white">
-                                        {people.map((person) => (
-                                            <tr key={person.email} className={selectedPeople.includes(person) ? 'bg-gray-50' : undefined}>
+                                        {setArray.map((set, idx) => (
+                                            <tr key={idx} className={set.disabled ? 'bg-gray-50' : undefined}>
 
                                                 <td
                                                     className={classNames(
                                                         'whitespace-nowrap py-4 pl-6 text-sm font-medium',
-                                                        selectedPeople.includes(person) ? 'text-indigo-600' : 'text-gray-900'
+                                                        set.disabled ? 'text-indigo-600' : 'text-gray-900'
                                                     )}
                                                 >
-                                                    1
+                                                    {idx + 1}
                                                 </td>
 
                                                 <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><label htmlFor="email" className="sr-only">
-                                                    Email
+                                                    weight
                                                 </label>
                                                     <input
-                                                        type="email"
-                                                        name="email"
-                                                        id="email"
+                                                        type="weight"
+                                                        name="weight"
+                                                        id="weight"
                                                         className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                                        placeholder="20"
+                                                        placeholder={set.weight}
                                                     /></td>
                                                 <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><label htmlFor="email" className="sr-only">
-                                                    Email
+                                                    reps
                                                 </label>
                                                     <input
-                                                        type="email"
-                                                        name="email"
-                                                        id="email"
+                                                        type="reps"
+                                                        name="reps"
+                                                        id="reps"
                                                         className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                                        placeholder="20"
+                                                        placeholder={set.reps}
                                                     /></td>
-                                                {/* <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{person.role}</td> */}
-                                                {/* <td className="whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                                                <a href="#" className="text-indigo-600 hover:text-indigo-900">
-                                                    Edit<span className="sr-only">, {person.name}</span>
-                                                </a>
-                                            </td> */}
+
                                                 <td className="relative w-12 px-6 sm:w-16 sm:px-8">
-                                                    {selectedPeople.includes(person) && (
-                                                        <div
-                                                            className="absolute 
-                                                    inset-y-0 left-0 w-0.5 
-                                                    bg-indigo-600"
-                                                        />
-                                                    )}
                                                     <input
                                                         type="checkbox"
                                                         className="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 sm:left-6"
-                                                        value={person.email}
-                                                        checked={selectedPeople.includes(person)}
-                                                        onChange={(e) =>
-                                                            setSelectedPeople(
-                                                                e.target.checked
-                                                                    ? [...selectedPeople, person]
-                                                                    : selectedPeople.filter((p) => p !== person)
-                                                            )
+                                                        value={set.weight}
+                                                        checked={set.disabled}
+                                                        disabled={set.disabled}
+                                                        onChange={(e) => {
+                                                            set.disabled = true
+                                                            setSelectedSet(set)
+                                                            addUserLog(selectedSet, lineId)
+                                                        }
                                                         }
                                                     />
                                                 </td>
@@ -179,7 +138,8 @@ function ExerciseDetails({ }: Props) {
                     </CountdownCircleTimer>
                     <button
                         className='mt-14 bg-gray-900 flex w-full justify-center rounded-md border border-transparent py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2'
-                        onClick={() => setStart(!start)}>Start Timer
+                        onClick={() => setStart(!start)}>
+                        {startButton}
                     </button>
                 </div>
             </div>

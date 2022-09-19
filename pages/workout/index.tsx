@@ -1,10 +1,10 @@
 import React from "react";
 import Header from "../../components/header";
 import SideBar from "../../components/sideBar";
-import SideBar2 from "../../components/sideBar";
 import { Workout } from "../../types";
 import { prisma } from '../../db/index';
 import { withPageAuth } from "@supabase/auth-helpers-nextjs";
+import Link from "next/link";
 
 type Props = { workouts: Workout[] };
 
@@ -47,7 +47,7 @@ function workout({ workouts }: Props) {
   return (
     <>
       <div>
-        <SideBar2 />
+        <SideBar />
         <div className='flex flex-1 flex-col md:pl-64'>
           <Header />
           <main className='flex-1'>
@@ -62,25 +62,25 @@ function workout({ workouts }: Props) {
 
                     <div className='grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8'>
                       {workouts.map((product) => (
-                        <a
-                          key={product.id}
-                          //   href={product.href}
-                          className='group'
-                        >
-                          <div className='aspect-w-1 aspect-h-1 w-full overflow-hidden rounded-lg sm:aspect-w-2 sm:aspect-h-3'>
-                            <img
-                              src={product.imageSrc}
-                              alt={product.imageAlt}
-                              className='h-full w-full object-cover object-center group-hover:opacity-75'
-                            />
-                          </div>
-                          <div className='mt-4 flex items-center justify-between text-base font-medium text-gray-900'>
-                            <h3>{product.name}</h3>
-                          </div>
-                          {/* <p className='mt-1 text-sm italic text-gray-500'>
+                        <Link href={product.href} key={product.id}>
+                          <a
+                            className='group'
+                          >
+                            <div className='aspect-w-1 aspect-h-1 w-full overflow-hidden rounded-lg sm:aspect-w-2 sm:aspect-h-3'>
+                              <img
+                                src={product.imageSrc}
+                                alt={product.imageAlt}
+                                className='h-full w-full object-cover object-center group-hover:opacity-75'
+                              />
+                            </div>
+                            <div className='mt-4 flex items-center justify-between text-base font-medium text-gray-900'>
+                              <h3>{product.name}</h3>
+                            </div>
+                            {/* <p className='mt-1 text-sm italic text-gray-500'>
                             {product.name}
                           </p> */}
-                        </a>
+                          </a>
+                        </Link>
                       ))}
                     </div>
                   </div>
@@ -101,6 +101,7 @@ export const getServerSideProps = withPageAuth({
   redirectTo: '/login',
   async getServerSideProps() {
     const workouts = await prisma.workout.findMany();
+    console.log(workouts)
     return { props: { workouts } };
   }
 });
