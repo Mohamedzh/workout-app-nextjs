@@ -8,7 +8,7 @@ import {
     HomeIcon,
     XMarkIcon,
 } from '@heroicons/react/24/outline'
-import { classNames } from './functions'
+import { classNames } from '../lib/functions'
 import Link from 'next/link'
 import { Navigation } from '../types'
 

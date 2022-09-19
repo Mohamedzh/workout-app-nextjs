@@ -1,10 +1,9 @@
 import { Exercise, PrismaClient, WorkoutLine } from '@prisma/client'
 import { NextRouter } from 'next/router'
-import { supaBase } from './supabase'
+import { supaBase } from '../components/supabase'
 import axios from 'axios'
 import { supabaseClient } from '@supabase/auth-helpers-nextjs'
 import { Dispatch } from '@reduxjs/toolkit'
-import { addExercises } from '../redux/slices/exerciseSlice'
 import { SignUp } from '../types'
 
 
@@ -14,7 +13,6 @@ export const signupUser = async (router: NextRouter, email: string, password: st
     const res2 = await supabaseClient.auth.signIn({ email, password, }, { redirectTo: '/' })
     await axios.post("/api/signup", body)
     router.push('/')
-
 }
 
 export const loginUser = async (router: NextRouter, email: string, password: string) => {
@@ -54,8 +52,8 @@ export function classNames(...classes: string[]) {
 //     }
 // }
 
-export const addUserLog = async (set, lineId: string) => {
-    const data = { step: set.index, rec: set.rec, weights: set.weights, workoutLineId: lineId }
+export const addUserLog = async (rep: string, weight: string, index: number, lineId: string) => {
+    const data = { step: index + 1, reps: rep, weights: weight, workoutLineId: 3 }
     const res = await axios.post("/api/userlog", data)
-
+    console.log(res)
 }

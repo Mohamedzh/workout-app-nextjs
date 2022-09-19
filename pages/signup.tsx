@@ -7,7 +7,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { signupUser } from "../components/functions";
+import { signupUser } from "../lib/functions";
 
 type Props = {};
 

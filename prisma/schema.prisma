@@ -53,7 +53,7 @@ model WorkoutLine {
   recReps          Int
   recWeights       Int
   createdAt        DateTime  @default(now())
-  updatedAt        DateTime  @updatedAt
+  updatedAt        DateTime  @updatedAt @default(now())
   workoutId        Int
   workoutRelation  Workout   @relation(fields: [workoutId], references: [id])
   exerciseId       Int
@@ -67,7 +67,7 @@ model UserLog {
   step                Int
   weights             Int
   createdAt           DateTime    @default(now())
-  updatedAt           DateTime    @updatedAt
+  updatedAt           DateTime    @updatedAt @default(now())
   userId              String
   userRelation        User        @relation(fields: [userId], references: [id])
   workoutLineId       Int

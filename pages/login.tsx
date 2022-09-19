@@ -5,7 +5,7 @@ import * as Yup from 'yup'
 import { supaBase } from '../components/supabase'
 import { useRouter } from "next/router";
 import Link from "next/link";
-import { loginUser, signOut } from "../components/functions";
+import { loginUser, signOut } from "../lib/functions";
 import { User, withPageAuth } from "@supabase/auth-helpers-nextjs";
 
 
