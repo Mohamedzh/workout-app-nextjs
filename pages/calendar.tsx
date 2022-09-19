@@ -5,9 +5,6 @@ import Calendar from "../components/calendar";
 import Header from "../components/header";
 import SideBar from "../components/sideBar";
 import { prisma } from "../db/index";
-import { getUser } from "@supabase/auth-helpers-nextjs";
-import { NextApiRequest, NextApiResponse } from "next";
-import axios from "axios";
 
 export default function CalendarPage({
   updatedLog,
@@ -16,7 +13,9 @@ export default function CalendarPage({
   updatedLog: UserLog[];
   user: User;
 }) {
-  console.log(updatedLog);
+
+
+
   return (
     <>
       <div>
@@ -49,6 +48,17 @@ export const getServerSideProps = withPageAuth({
       };
     });
     const workoutlines = await prisma.workoutLine.findMany();
+    let selectedLog = []
+    for (let i=0; i<workoutlines.length; i++) {
+    selectedLog.push(updatedLog.find((item)=> item.workoutLineId === workoutlines[i].id))
+  }
+  console.log("hi", selectedLog)
+  const workouts = await prisma.workout.findMany();
+  // for (let i=0; i<workouts.length; i++) {
+  //   const selectedWorkout = workouts.filter((item)=> item.workouts[i].id === selectedLog.workoutLineId);
+  //   condole.log(selectedWorkout)
+  // }
+  
 
     return { props: { updatedLog } };
   },
