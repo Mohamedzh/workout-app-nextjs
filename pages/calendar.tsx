@@ -39,6 +39,7 @@ export default function CalendarPage({
 export const getServerSideProps = withPageAuth({
   redirectTo: "/login",
   async getServerSideProps() {
+    console.log("object");
     const WorkoutLog = await prisma?.userLog.findMany();
     const updatedLog = WorkoutLog.map((item) => {
       return {
@@ -48,17 +49,10 @@ export const getServerSideProps = withPageAuth({
       };
     });
     const workoutlines = await prisma.workoutLine.findMany();
-    let selectedLog = []
-    for (let i=0; i<workoutlines.length; i++) {
-    selectedLog.push(updatedLog.find((item)=> item.workoutLineId === workoutlines[i].id))
-  }
-  console.log("hi", selectedLog)
-  const workouts = await prisma.workout.findMany();
-  // for (let i=0; i<workouts.length; i++) {
-  //   const selectedWorkout = workouts.filter((item)=> item.workouts[i].id === selectedLog.workoutLineId);
-  //   condole.log(selectedWorkout)
-  // }
-  
+
+  const selectedWorkoutLine = workoutlines.find((item, index)=> item.id === updatedLog[index].workoutLineId)
+  const workouts = await prisma.workout.findMany()
+  const selectedWorkout = workouts.find((item)=> item.id === selectedWorkoutLine?.workoutId)
 
     return { props: { updatedLog } };
   },
