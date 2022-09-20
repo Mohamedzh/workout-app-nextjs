@@ -3,6 +3,7 @@ import React, { useEffect } from 'react'
 import { useLayoutEffect, useRef, useState } from 'react'
 import { CountdownCircleTimer } from 'react-countdown-circle-timer'
 import { addUserLog, classNames } from '../lib/functions'
+import Notification from './notification'
 
 type Props = {
     setArray: { reps: string, weight: string, disabled: boolean }[]
@@ -83,8 +84,7 @@ function ExerciseDetails({ setArray, lineId }: Props) {
                                     </thead>
                                     <tbody className="divide-y divide-gray-200 bg-white">
                                         {setArray.map((set, idx) => (
-                                            <tr key={idx} className={set.disabled ? 'bg-gray-50' : undefined}>
-
+                                            <tr key={idx} className={set.disabled ? 'bg-green-50' : undefined}>
                                                 <td
                                                     className={classNames(
                                                         'whitespace-nowrap py-4 pl-6 text-sm font-medium',
@@ -93,7 +93,6 @@ function ExerciseDetails({ setArray, lineId }: Props) {
                                                 >
                                                     {idx + 1}
                                                 </td>
-
                                                 <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><label htmlFor="email" className="sr-only">
                                                     weight
                                                 </label>
@@ -106,7 +105,8 @@ function ExerciseDetails({ setArray, lineId }: Props) {
                                                         value={formik.values.weight}
                                                         className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2"
                                                         placeholder={set.weight}
-                                                    /></td>
+                                                    />
+                                                </td>
                                                 <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><label htmlFor="email" className="sr-only">
                                                     reps
                                                 </label>
@@ -119,10 +119,10 @@ function ExerciseDetails({ setArray, lineId }: Props) {
                                                         value={formik.values.reps}
                                                         className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2"
                                                         placeholder={set.reps}
-                                                    /></td>
-
+                                                    />
+                                                </td>
                                                 <td className="relative w-12 px-6 sm:w-16 sm:px-8">
-                                                    <input
+                                                    {!set.disabled && <input
                                                         type="checkbox"
                                                         className="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 sm:left-6"
                                                         value={set.weight}
@@ -135,7 +135,8 @@ function ExerciseDetails({ setArray, lineId }: Props) {
                                                             formik.handleSubmit()
                                                         }
                                                         }
-                                                    />
+                                                    />}
+                                                    {set.disabled && <Notification />}
                                                 </td>
                                             </tr>
                                         ))}
