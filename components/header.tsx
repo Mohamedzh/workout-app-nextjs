@@ -3,7 +3,7 @@ import { Menu, Transition } from '@headlessui/react'
 import {
     Bars3BottomLeftIcon,
 } from '@heroicons/react/24/outline'
-import { classNames, signOut } from './functions'
+import { classNames, signOut } from '../lib/functions'
 import { useRouter } from 'next/router'
 import { useUser } from '@supabase/auth-helpers-react'
 import { addUser } from '../redux/slices/userSlice'

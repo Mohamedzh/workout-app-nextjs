@@ -53,7 +53,8 @@ function Workout({ currentExercises }: { currentExercises: Exercise[] }) {
                     <Header />
                     <main className='flex-1'>
                         <div className='py-6 bg-slate-200 h-screen'>
-                            <div className='mx-auto max-w-7xl px-4 sm:px-6 md:px-8'></div>
+                            <div className='mx-auto max-w-7xl px-4 sm:px-6 md:px-8'>
+                            </div>
                             <div className='mx-auto max-w-7xl px-4 sm:px-6 md:px-8'>
                                 <div className='bg-white'>
                                     <div className='mx-auto max-w-2xl py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8'>

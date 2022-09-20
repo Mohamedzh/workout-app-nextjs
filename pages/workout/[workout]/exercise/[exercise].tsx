@@ -8,10 +8,11 @@ import Player from "../../../../components/videoPlayer";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../../../redux/hooks";
+import OtherExercises from "../../../../components/otherExercises";
 
-function Workout({ currentExercise, setArray, lineId
+function Workout({ currentExercise, setArray, lineId, other
 }: {
-  weight: string, currentExercise: Exercise, setArray: [], lineId:string
+  weight: string, currentExercise: Exercise, setArray: [], lineId: string, other: Exercise[]
 }) {
   // const dispatch = useDispatch()
   // const exerciseLines = useAppSelector(state=>state.exercise)
@@ -44,6 +45,7 @@ function Workout({ currentExercise, setArray, lineId
                   <Player currentExercise={currentExercise} setArray={setArray} />
                 </div>
                 <ExerciseDetails setArray={setArray} lineId={lineId} />
+                <OtherExercises other={other} />
               </div>
             </div>
           </main>
@@ -77,26 +79,34 @@ export async function getStaticProps({
   const currentLine = workoutLines.find(
     (item) => item.exerciseId === +params.exercise && item.workoutId === +params.workout
   )
-  // console.log(currentLine)
 
-  const Exercises = await prisma.exercise.findMany();
-  const currentExercise = Exercises.find(item => item.id === +params.exercise)
+  const exercises = await prisma.exercise.findMany();
+  const currentExercise = exercises.find(item => item.id === +params.exercise)
 
+  const currentWorkoutExerciseIds = workoutLines.filter(
+    (item) => item.workoutId === +params.workout
+  )
 
-  const set = { reps: currentLine?.recReps, weight: currentLine?.recWeights, disabled:false }
-  let setArray: { reps?: number, weight?: number, disabled:boolean }[] = []
+  let other = []
+  for (let i = 0; i < currentWorkoutExerciseIds.length; i++) {
+    let target = exercises.find(exercise => exercise.id === currentWorkoutExerciseIds[i].id)
+    other.push(target)
+  }
+
+  const set = { reps: currentLine?.recReps, weight: currentLine?.recWeights, disabled: false }
+  let setArray: { reps?: number, weight?: number, disabled: boolean }[] = []
 
   if (currentLine) {
     for (let i = 0; i < currentLine.recSets; i++) {
       setArray.push(set)
     }
   }
-  // console.log(setArray)
   return {
     props: {
       currentExercise,
       setArray,
-      lineId:currentLine?.id
+      lineId: currentLine?.id,
+      other
     }
   };
 }

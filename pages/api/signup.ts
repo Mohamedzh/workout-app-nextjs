@@ -10,7 +10,17 @@ export default async function CreateUser(req: NextApiRequest, res: NextApiRespon
     const { firstName, lastName, email, password, weight, height, gender, age, } = req.body;
     const current = await getUser({ req, res })
     const newUser = await prisma.user.create({
-      data: { id: current.user.id, firstName, lastName, email, password, weight, height, gender, age, },
+      data: {
+        id: current.user.id,
+        firstName,
+        lastName,
+        email,
+        password,
+        weight,
+        height,
+        gender,
+        age,
+      },
     });
     console.log(newUser)
     res.status(201).json(newUser);
