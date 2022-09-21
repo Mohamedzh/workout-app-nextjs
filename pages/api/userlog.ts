@@ -6,6 +6,7 @@ export default async function sendUserLog(req: NextApiRequest, res: NextApiRespo
     try {
         const { workoutLineId, reps, step, weights } = req.body
         const current = await getUser({ req, res })
+        console.log("hi", current )
         console.log(req.body, current.user.id)
         await prisma.userLog.create({
             data: {
