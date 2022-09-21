@@ -2,11 +2,10 @@ import { NextPage } from "next";
 import React from "react";
 import { useFormik } from "formik";
 import * as Yup from 'yup'
-import { supaBase } from '../components/supabase'
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { loginUser, signOut } from "../lib/functions";
-import { User, withPageAuth } from "@supabase/auth-helpers-nextjs";
+import { User } from "@supabase/auth-helpers-nextjs";
 
 
 const login: NextPage = ({ user }: { user?: User }) => {
@@ -143,5 +142,3 @@ const login: NextPage = ({ user }: { user?: User }) => {
 };
 
 export default login;
-
-// export const getServerSideProps = withPageAuth()

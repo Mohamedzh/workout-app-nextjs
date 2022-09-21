@@ -31,7 +31,7 @@ const signup: NextPage = (props: Props) => {
       age: "",
     },
     onSubmit: (values) => {
-      const body = { ...values, gender:selected.name };
+      const body = { ...values, gender: selected.name };
       signupUser(router, values.email, values.password, body)
     },
     validationSchema: Yup.object({

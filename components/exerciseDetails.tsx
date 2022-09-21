@@ -17,7 +17,7 @@ function ExerciseDetails({ setArray, lineId }: Props) {
     const [index, setIndex] = useState<number>(0)
     const [selectedSet, setSelectedSet] = useState<{ reps: string, weight: string }>()
 
-    useEffect(() => { setStartButton(start ? "Stop" : "Start Timer"); console.log(index) }, [start])
+    useEffect(() => { setStartButton(start ? "Stop" : "Start Timer"); console.log(index, lineId) }, [start])
 
     const formik = useFormik({
         initialValues: {
@@ -97,7 +97,7 @@ function ExerciseDetails({ setArray, lineId }: Props) {
                                                     weight
                                                 </label>
                                                     <input
-                                                        type="weight"
+                                                        type="number"
                                                         name="weight"
                                                         id="weight"
                                                         onBlur={formik.handleBlur}
@@ -105,13 +105,14 @@ function ExerciseDetails({ setArray, lineId }: Props) {
                                                         value={formik.values.weight}
                                                         className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2"
                                                         placeholder={set.weight}
+                                                        disabled={set.disabled}
                                                     />
                                                 </td>
                                                 <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><label htmlFor="email" className="sr-only">
                                                     reps
                                                 </label>
                                                     <input
-                                                        type="reps"
+                                                        type="number"
                                                         name="reps"
                                                         id="reps"
                                                         onBlur={formik.handleBlur}
@@ -119,6 +120,7 @@ function ExerciseDetails({ setArray, lineId }: Props) {
                                                         value={formik.values.reps}
                                                         className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2"
                                                         placeholder={set.reps}
+                                                        disabled={set.disabled}
                                                     />
                                                 </td>
                                                 <td className="relative w-12 px-6 sm:w-16 sm:px-8">

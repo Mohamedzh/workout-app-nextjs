@@ -1,13 +1,11 @@
 import { WorkoutLine } from '@prisma/client';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { User } from '@supabase/supabase-js';
-import { Exercise } from '../../types';
 
 
 const initialState: WorkoutLine[] = []
 
 const exerciseSlice = createSlice({
-    name: 'user',
+    name: 'exercise',
     initialState,
     reducers: {
         addExercises: (state, action: PayloadAction<WorkoutLine[]>) => {
