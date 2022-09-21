@@ -6,8 +6,6 @@ import {
 import { classNames, signOut } from '../lib/functions'
 import { useRouter } from 'next/router'
 import { useUser } from '@supabase/auth-helpers-react'
-import { addUser } from '../redux/slices/userSlice'
-import { useDispatch } from 'react-redux'
 
 const userNavigation = [
     { name: 'Your Profile', href: '#' },
@@ -15,12 +13,11 @@ const userNavigation = [
     { name: 'Sign out', href: '#' },
 ]
 
-type Props = {}
 
-function Header({ }: Props) {
-    const dispatch = useDispatch()
-    const user = useUser()
+function Header() {
 
+    const { user } = useUser()
+    const userName = user?.user_metadata.name
     const [sidebarOpen, setSidebarOpen] = useState(false)
     const router = useRouter()
     useEffect(() => {
@@ -28,7 +25,7 @@ function Header({ }: Props) {
         // if(user){
         //     dispatch(addUser(user))
         // }
-    }, [])
+    }, [user])
 
     return (
         <div className="sticky top-0 z-10 flex h-16 flex-shrink-0 bg-white shadow">
@@ -43,7 +40,7 @@ function Header({ }: Props) {
             <div className="flex flex-1 place-content-end px-4">
                 <div className="ml-4 flex justify-items-end items-center md:ml-6">
                     {/* Profile dropdown */}
-                    <p className='flex-1'>Name</p>
+                    <p className='flex-1'>{userName}</p>
                     <Menu as="div" className="relative  ml-3">
                         <div className=''>
                             <Menu.Button className="flex max-w-xs items-center rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">

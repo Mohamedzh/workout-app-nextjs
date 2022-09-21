@@ -11,11 +11,10 @@ datasource db {
 }
 
 model User {
-  id        String       @id
+  id        String    @id
   firstName String
   lastName  String
   email     String
-  password  String
   imageSrc  String    @default("imageUrl")
   imageAlt  String    @default("imageAlt")
   weight    Int
@@ -23,7 +22,7 @@ model User {
   gender    String
   age       Int
   createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt @default(now())
+  updatedAt DateTime  @default(now()) @updatedAt
   userLogs  UserLog[]
 }
 
@@ -40,9 +39,9 @@ model Exercise {
   id           Int           @id @default(autoincrement())
   name         String
   description  String
-  imageSrc     String 
-  imageAlt     String 
-  videoUrl     String 
+  imageSrc     String
+  imageAlt     String
+  videoUrl     String
   href         String        @default("/exercise")
   workoutLines WorkoutLine[]
 }
@@ -53,12 +52,14 @@ model WorkoutLine {
   recReps          Int
   recWeights       Int
   createdAt        DateTime  @default(now())
-  updatedAt        DateTime  @updatedAt @default(now())
+  updatedAt        DateTime  @default(now()) @updatedAt
   workoutId        Int
   workoutRelation  Workout   @relation(fields: [workoutId], references: [id])
   exerciseId       Int
   exerciseRelation Exercise  @relation(fields: [exerciseId], references: [id])
   userLogs         UserLog[]
+
+  @@unique([workoutId, exerciseId])
 }
 
 model UserLog {
@@ -67,7 +68,7 @@ model UserLog {
   step                Int
   weights             Int
   createdAt           DateTime    @default(now())
-  updatedAt           DateTime    @updatedAt @default(now())
+  updatedAt           DateTime    @default(now()) @updatedAt
   userId              String
   userRelation        User        @relation(fields: [userId], references: [id])
   workoutLineId       Int

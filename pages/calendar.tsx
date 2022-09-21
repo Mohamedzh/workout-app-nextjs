@@ -18,13 +18,14 @@ export default function CalendarPage({
 
   return (
     <>
-      <div>
+      <div className=" bg-slate-200 h-screen">
         <SideBar />
         <div className='flex flex-1 flex-col md:pl-64'>
           <Header />
-          <main className='flex-1  bg-slate-200 h-screen'>
+          <main className='flex-1'>
             <div className='py-6'>
-              <div className='mx-auto max-w-7xl px-4 sm:px-6 md:px-8'></div>
+              <div className='mx-auto max-w-7xl px-4 sm:px-6 md:px-8'>
+              </div>
               <div className='mx-auto max-w-7xl px-4 sm:px-6 md:px-8'>
                 <Calendar updatedLog={updatedLog} />
               </div>
@@ -50,9 +51,9 @@ export const getServerSideProps = withPageAuth({
     });
     const workoutlines = await prisma.workoutLine.findMany();
 
-  const selectedWorkoutLine = workoutlines.find((item, index)=> item.id === updatedLog[index].workoutLineId)
-  const workouts = await prisma.workout.findMany()
-  const selectedWorkout = workouts.find((item)=> item.id === selectedWorkoutLine?.workoutId)
+    const selectedWorkoutLine = workoutlines.find((item, index) => item.id === updatedLog[index].workoutLineId)
+    const workouts = await prisma.workout.findMany()
+    const selectedWorkout = workouts.find((item) => item.id === selectedWorkoutLine?.workoutId)
 
     return { props: { updatedLog } };
   },

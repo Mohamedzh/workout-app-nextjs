@@ -1,19 +1,5 @@
-export interface Workout {
-  id: number
-  name: string
-  imageSrc: string
-  imageAlt: string
-  href: string
-}
+import { Exercise } from "@prisma/client"
 
-export interface Exercise {
-  id: number
-  name: string
-  description: string
-  imageUrl: string
-  videoUrl: string
-  href: string
-}
 
 export interface Navigation {
   name: string
@@ -27,8 +13,18 @@ export interface SignUp {
   lastName: string
   email: string
   password: string
-  weight: number
-  height: number
+  weight: string
+  height: string
   gender: string
-  age: number
+  age: string
+}
+
+export interface ExerciseWithSets extends Exercise {
+  sets: string
+  reps: string
+}
+
+export interface PersonalRecord {
+  weight: number
+  name: string
 }

@@ -4,44 +4,43 @@ import Header from "../../../../components/header";
 import SideBar from "../../../../components/sideBar";
 import { prisma } from "../../../../db/index";
 import ExerciseDetails from "../../../../components/exerciseDetails";
-import Player from "../../../../components/videoPlayer";
-import { useRouter } from "next/router";
-import { useDispatch } from "react-redux";
-import { useAppSelector } from "../../../../redux/hooks";
+import Player from "../../../../components/videoSection";
 import OtherExercises from "../../../../components/otherExercises";
+import LoginModal from "../../../../components/loginModal";
+import { useUser } from "@supabase/auth-helpers-react";
+import { useRouter } from "next/router";
 
 function Workout({ currentExercise, setArray, lineId, other
 }: {
   weight: string, currentExercise: Exercise, setArray: [], lineId: string, other: Exercise[]
 }) {
-  // const dispatch = useDispatch()
-  // const exerciseLines = useAppSelector(state=>state.exercise)
-  // const router = useRouter()
-  // const [currentLines, setCurrentLines] = useState<WorkoutLine[]>()
-  // console.log(router.query)
 
-  // useEffect(()=>{getExercise(dispatch)},[])
+  const { user } = useUser()
+  const router = useRouter()
+  useEffect(() => {
+    if (user === null) {
+      router.push('/login')
+    }
+    // if (user.user === null) {
+    //   setOpen(true)
+    // } else { setOpen(false) }
+  }, [user])
 
-  // useEffect(()=>{setCurrentLines(exerciseLines)},[exerciseLines])
-
-
-  // console.log(currentLines)
-  // if(router.query.workout){
-  // console.log(currentLines?.filter(line=>line.workoutId === +router.query.workout))
-  // }
+  const [open, setOpen] = useState(true)
 
   return (
     <>
-      <div>
+      <div className="bg-slate-200 h-screen">
         <SideBar />
         <div className="flex flex-1 flex-col md:pl-64">
           <Header />
-          <main className="flex-1 bg-slate-200 h-screen pb-10">
+          <main className="flex-1 pb-10 bg-slate-200 h-screen">
             <div className="py-6">
               <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
               </div>
               <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
                 <div className="mb-10">
+                  {/* <LoginModal open={open} setOpen={setOpen} /> */}
                   <Player currentExercise={currentExercise} setArray={setArray} />
                 </div>
                 <ExerciseDetails setArray={setArray} lineId={lineId} />
@@ -63,7 +62,6 @@ export async function getStaticPaths() {
   const paths = exercises.map((item) => ({
     params: { exercise: item.exerciseId.toString(), workout: item.workoutId.toString() },
   }));
-  console.log(paths);
   return {
     paths,
     fallback: false,
@@ -93,6 +91,8 @@ export async function getStaticProps({
     other.push(target)
   }
 
+  other = other.filter(item => item?.id !== currentLine?.id)
+
   const set = { reps: currentLine?.recReps, weight: currentLine?.recWeights, disabled: false }
   let setArray: { reps?: number, weight?: number, disabled: boolean }[] = []
 
@@ -101,6 +101,8 @@ export async function getStaticProps({
       setArray.push(set)
     }
   }
+
+
   return {
     props: {
       currentExercise,

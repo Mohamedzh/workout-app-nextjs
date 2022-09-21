@@ -1,40 +1,18 @@
 import {
-  ClockIcon,
-  CogIcon,
-  CreditCardIcon,
-  DocumentChartBarIcon,
-  HomeIcon,
-  QuestionMarkCircleIcon,
-  ScaleIcon,
-  ShieldCheckIcon,
-  UserGroupIcon,
-} from '@heroicons/react/24/outline'
-import {
   BanknotesIcon,
   CheckCircleIcon,
   ChevronRightIcon,
 } from '@heroicons/react/20/solid'
-import { classNames } from '../lib/functions'
+import { classNames, getPersonalBest } from '../lib/functions'
 import { useRouter } from 'next/router'
+import { PersonalRecord } from '../types'
+import { User } from '@supabase/supabase-js'
 
-const navigation = [
-  { name: 'Home', href: '#', icon: HomeIcon, current: true },
-  { name: 'History', href: '#', icon: ClockIcon, current: false },
-  { name: 'Balances', current: false },
-  { name: 'Cards', href: '#', icon: CreditCardIcon, current: false },
-  { name: 'Recipients', href: '#', icon: UserGroupIcon, current: false },
-  { name: 'Reports', href: '#', icon: DocumentChartBarIcon, current: false },
-]
-const secondaryNavigation = [
-  { name: 'Settings', href: '#', icon: CogIcon },
-  { name: 'Help', href: '#', icon: QuestionMarkCircleIcon },
-  { name: 'Privacy', href: '#', icon: ShieldCheckIcon },
-]
 const cards = [
-  { name: 'Squat', weight: '250 lbs', color: "bg-red-600" },
-  { name: 'Bicep Curl', weight: '150    lbs', color: "bg-gray-900" },
-  { name: 'Bench Press', weight: '350   lbs', color: "bg-blue-600" },
-  { name: 'Overhead Press', weight: '200    lbs', color: "bg-green-600" }
+  { name: 'Squat', color: "bg-red-600" },
+  { name: 'Bicep Curl', color: "bg-gray-900" },
+  { name: 'Bench Press', color: "bg-blue-600" },
+  { name: 'Overhead Press', color: "bg-green-600" }
 ]
 const transactions = [
   {
@@ -56,7 +34,7 @@ const statusStyles = {
   failed: 'bg-gray-100 text-gray-800',
 }
 
-export default function Dashboard() {
+export default function Dashboard({ personalBestRecords, userName}: { personalBestRecords: PersonalRecord[], userName: string }) {
   const router = useRouter()
 
   return (
@@ -65,7 +43,6 @@ export default function Dashboard() {
         <div className="px-4 sm:px-6 lg:mx-auto lg:max-w-6xl lg:px-8">
           <div className="py-6 md:flex md:items-center md:justify-between lg:border-t lg:border-gray-200">
             <div className="min-w-0 flex-1">
-              {/* Profile */}
               <div className="flex items-center">
                 <img
                   className="hidden h-16 w-16 rounded-full sm:block"
@@ -80,7 +57,7 @@ export default function Dashboard() {
                       alt=""
                     />
                     <h1 className="ml-3 text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:leading-9">
-                      Good morning, Samir
+                      Good morning, {userName}
                     </h1>
                   </div>
                   <dl className="mt-6 flex flex-col sm:ml-3 sm:mt-1 sm:flex-row sm:flex-wrap">
@@ -104,12 +81,12 @@ export default function Dashboard() {
               >
                 Browse workouts
               </button>
-              <button
+              {/* <button
                 type="button"
                 className="inline-flex items-center rounded-md border border-transparent bg-gray-900 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2"
               >
                 Start today's workout
-              </button>
+              </button> */}
             </div>
           </div>
         </div>
@@ -119,7 +96,7 @@ export default function Dashboard() {
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <h2 className="text-lg font-medium leading-6 text-gray-900">Personal Records</h2>
           <div className="mt-2 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {/* Card */}
+
             {cards.map((card) => (
               <div key={card.name} className={`overflow-hidden ${card.color} rounded-lg shadow`}>
                 <div className="p-5">
@@ -128,7 +105,7 @@ export default function Dashboard() {
                       <dl>
                         <dt className="truncate text-sm font-medium text-white">{card.name}</dt>
                         <dd>
-                          <div className="text-lg font-medium text-white">{card.weight}</div>
+                          <div className="text-lg font-medium text-white">{getPersonalBest(card.name, personalBestRecords) || 0} Ibs</div>
                         </dd>
                       </dl>
                     </div>
@@ -138,13 +115,13 @@ export default function Dashboard() {
             ))}
           </div>
         </div>
-
+        {/* 
         <h2 className="mx-auto mt-8 max-w-6xl px-4 text-lg font-medium leading-6 text-gray-900 sm:px-6 lg:px-8">
           Today's workout
-        </h2>
+        </h2> */}
 
         {/* Activity list (smallest breakpoint only) */}
-        <div className="shadow sm:hidden">
+        {/* <div className="shadow sm:hidden">
           <ul role="list" className="mt-2 divide-y divide-gray-200 overflow-hidden shadow sm:hidden">
             {transactions.map((transaction) => (
               <li key={transaction.id}>
@@ -187,10 +164,10 @@ export default function Dashboard() {
               </a>
             </div>
           </nav>
-        </div>
+        </div> */}
 
         {/* Activity table (small breakpoint and up) */}
-        <div className="hidden sm:block">
+        {/* <div className="hidden sm:block">
           <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
             <div className="mt-2 flex flex-col">
               <div className="min-w-full overflow-hidden overflow-x-auto align-middle shadow sm:rounded-lg">
@@ -259,9 +236,9 @@ export default function Dashboard() {
                       </tr>
                     ))}
                   </tbody>
-                </table>
-                {/* Pagination */}
-                <nav
+                </table> */}
+        {/* Pagination */}
+        {/* <nav
                   className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6"
                   aria-label="Pagination"
                 >
@@ -289,7 +266,7 @@ export default function Dashboard() {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </>
   )
