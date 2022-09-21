@@ -26,7 +26,6 @@ export function middleware(request: NextRequest) {
                 redirectTo: '/login',
             },
         })
-
     }
 }
 

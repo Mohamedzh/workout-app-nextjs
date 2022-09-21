@@ -1,5 +1,5 @@
 // import { UserLog } from "@prisma/client";
-import { UserLog } from "@prisma/client";
+import { UserLog, Workout, WorkoutLine, Exercise } from "@prisma/client";
 import { User, withPageAuth } from "@supabase/auth-helpers-nextjs";
 import Calendar from "../components/calendar";
 import Header from "../components/header";
@@ -7,15 +7,11 @@ import SideBar from "../components/sideBar";
 import { prisma } from "../db/index";
 
 export default function CalendarPage({
-  updatedLog,
-  user,
+  logs
 }: {
-  updatedLog: UserLog[];
-  user: User;
+  logs: UserLog[];
 }) {
-
-
-
+  console.log(logs)
   return (
     <>
       <div className=" bg-slate-200 h-screen">
@@ -27,7 +23,9 @@ export default function CalendarPage({
               <div className='mx-auto max-w-7xl px-4 sm:px-6 md:px-8'>
               </div>
               <div className='mx-auto max-w-7xl px-4 sm:px-6 md:px-8'>
-                <Calendar updatedLog={updatedLog} />
+                <Calendar
+                  logs={logs}
+                />
               </div>
             </div>
           </main>
@@ -41,20 +39,10 @@ export const getServerSideProps = withPageAuth({
   redirectTo: "/login",
   async getServerSideProps() {
     console.log("object");
-    const WorkoutLog = await prisma?.userLog.findMany();
-    const updatedLog = WorkoutLog.map((item) => {
-      return {
-        ...item,
-        createdAt: item.createdAt.getTime(),
-        updatedAt: item.updatedAt.getTime(),
-      };
-    });
-    const workoutlines = await prisma.workoutLine.findMany();
-
-    const selectedWorkoutLine = workoutlines.find((item, index) => item.id === updatedLog[index].workoutLineId)
-    const workouts = await prisma.workout.findMany()
-    const selectedWorkout = workouts.find((item) => item.id === selectedWorkoutLine?.workoutId)
-
-    return { props: { updatedLog } };
+    const logs = await prisma?.userLog.findMany({ include: { workoutLineRelation: { include: { exerciseRelation: true, workoutRelation: true } } } });
+    // const logs = await prisma.workoutLine.findMany({include: {userLogs: true}});
+    console.log("hi", logs)
+    // );
+    return { props: { logs: JSON.parse(JSON.stringify(logs)) } };
   },
 });

@@ -3,9 +3,22 @@ import { Fragment } from "react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/20/solid";
 import WorkoutHistory from "./workoutHistory";
 import startOfToday from "date-fns/startOfToday";
-import { format, eachDayOfInterval, startOfMonth, endOfMonth, startOfWeek, endOfWeek, isToday, isSameMonth, isEqual, parse, add, getDay } from "date-fns";
-import { useState } from 'react';
-import { UserLog } from "@prisma/client";
+import {
+  format,
+  eachDayOfInterval,
+  startOfMonth,
+  endOfMonth,
+  startOfWeek,
+  endOfWeek,
+  isToday,
+  isSameMonth,
+  isEqual,
+  parse,
+  add,
+  getDay,
+} from "date-fns";
+import { useState } from "react";
+import { UserLog, Workout, WorkoutLine, Exercise } from "@prisma/client";
 
 const meetings = [
   {
@@ -13,45 +26,78 @@ const meetings = [
     name: "Leslie Alexander",
     imageUrl:
       "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-    start: "1:00 PM",
-    startDatetime: "2022-01-21T13:00",
-    end: "2:30 PM",
-    endDatetime: "2022-01-21T14:30",
+    startDatetime: "2022-05-11T13:00",
+    endDatetime: "2022-05-11T14:30",
   },
-  // More meetings...
+  {
+    id: 2,
+    name: "Michael Foster",
+    imageUrl:
+      "https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
+    startDatetime: "2022-05-20T09:00",
+    endDatetime: "2022-05-20T11:30",
+  },
+  {
+    id: 3,
+    name: "Dries Vincent",
+    imageUrl:
+      "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
+    startDatetime: "2022-05-20T17:00",
+    endDatetime: "2022-05-20T18:30",
+  },
+  {
+    id: 4,
+    name: "Leslie Alexander",
+    imageUrl:
+      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
+    startDatetime: "2022-06-09T13:00",
+    endDatetime: "2022-06-09T14:30",
+  },
+  {
+    id: 5,
+    name: "Michael Foster",
+    imageUrl:
+      "https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
+    startDatetime: "2022-05-13T14:00",
+    endDatetime: "2022-05-13T14:30",
+  },
 ];
 
 function classNames(...classes: any) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function Calendar({updatedLog}: {
-  updatedLog: UserLog[];
+export default function Calendar({
+logs
+}: {
+  logs: UserLog[];
 }) {
   let today = startOfToday();
-  let [selectedDay, setSelectedDay] = useState(today)
-  let [currentMonth, setCurrentMonth] = useState(format(today, 'MMM-yyyy'))
-  let firstDayOfCurrentMonth = parse(currentMonth,'MMM-yyyy', new Date())
+  let [selectedDay, setSelectedDay] = useState(today);
+  let [currentMonth, setCurrentMonth] = useState(format(today, "MMM-yyyy"));
+  let firstDayOfCurrentMonth = parse(currentMonth, "MMM-yyyy", new Date());
 
   let days = eachDayOfInterval({
     start: startOfWeek(firstDayOfCurrentMonth),
     end: endOfWeek(endOfMonth(firstDayOfCurrentMonth)),
   });
-  
-  function nextMonth(){
-    let firstDayOfNextMonth = add(firstDayOfCurrentMonth, {months: 1})
-    setCurrentMonth(format(firstDayOfNextMonth, 'MMM-yyyy')) 
+
+  function nextMonth() {
+    let firstDayOfNextMonth = add(firstDayOfCurrentMonth, { months: 1 });
+    setCurrentMonth(format(firstDayOfNextMonth, "MMM-yyyy"));
   }
 
-  function previousMonth(){
-    let firstDayOfNextMonth = add(firstDayOfCurrentMonth, {months: -1})
-    setCurrentMonth(format(firstDayOfNextMonth, 'MMM-yyyy')) 
+  function previousMonth() {
+    let firstDayOfNextMonth = add(firstDayOfCurrentMonth, { months: -1 });
+    setCurrentMonth(format(firstDayOfNextMonth, "MMM-yyyy"));
   }
 
   return (
     <div className='md:grid md:grid-cols-10 md:divide-x md:divide-gray-300'>
       <div className='col-span-6'>
-        <WorkoutHistory updatedLog={updatedLog} />
+        <WorkoutHistory
+          logs={logs}
+        />
       </div>
 
       <div className='hidden col-span-4	max-w-md flex-none border-l border-gray-100 py-10 px-8 md:block'>
@@ -89,25 +135,26 @@ export default function Calendar({updatedLog}: {
           {days.map((day, dayIdx) => (
             <button
               key={day.toString()}
-              onClick={()=> setSelectedDay(day)}
+              onClick={() => setSelectedDay(day)}
               type='button'
               className={classNames(
                 "py-1.5 hover:bg-gray-100 focus:z-10",
                 isSameMonth(day, today) ? "bg-white" : "bg-gray-50",
                 (isEqual(day, selectedDay) || isToday(day)) && "font-semibold",
-                isEqual(day, selectedDay) && "text-white hover:bg-red-700 rounded-full bg-red-500",
+                isEqual(day, selectedDay) &&
+                "text-white hover:bg-red-700 rounded-full bg-red-500",
                 !isEqual(day, selectedDay) &&
-                  isSameMonth(day, firstDayOfCurrentMonth) &&
-                  !isToday(day) &&
-                  "text-gray-900",
+                isSameMonth(day, firstDayOfCurrentMonth) &&
+                !isToday(day) &&
+                "text-gray-900",
                 !isEqual(day, selectedDay) &&
-                  !isSameMonth(day, firstDayOfCurrentMonth) &&
-                  !isToday(day) &&
-                  "text-gray-400",
+                !isSameMonth(day, firstDayOfCurrentMonth) &&
+                !isToday(day) &&
+                "text-gray-400",
                 isToday(day) && !isEqual(day, selectedDay) && "text-indigo-600",
                 dayIdx === 0 && "rounded-tl-lg",
                 dayIdx === 0 && "rounded-tl-lg",
-                dayIdx === 6 && "rounded-tr-lg",
+                dayIdx === 6 && "rounded-tr-lg"
                 // dayIdx === day.length - 7 && "rounded-bl-lg",
                 // dayIdx === day.length - 1 && "rounded-br-lg"
               )}
@@ -130,13 +177,12 @@ export default function Calendar({updatedLog}: {
   );
 }
 
-
 let colStartClasses = [
-  '',
-  'col-start-2',
-  'col-start-3',
-  'col-start-4',
-  'col-start-5',
-  'col-start-6',
-  'col-start-7',
-]
+  "",
+  "col-start-2",
+  "col-start-3",
+  "col-start-4",
+  "col-start-5",
+  "col-start-6",
+  "col-start-7",
+];

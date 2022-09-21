@@ -1,14 +1,24 @@
-import { UserLog } from "@prisma/client";
+import { UserLog, Workout, WorkoutLine, Exercise } from "@prisma/client";
+import { useUser } from "@supabase/auth-helpers-react";
 import React from "react";
 
-const WorkoutHistory = ({ updatedLog }: { updatedLog: UserLog[] }) => {
+const WorkoutHistory = ({
+  logs
+}: {
+  logs: UserLog[];
+}) => {
+  const user = useUser()
+  
+  const userLogs = logs.filter((log)=> log.userId === user.user?.id )
+  console.log(userLogs)
+
   return (
     <div>
       <div className='sticky top-20 bg-gray-50 px-4 py-6 shadow sm:rounded sm:p-6 md:flex md:items-center md:justify-between md:space-x-6 lg:space-x-8'>
         <dl className='flex-auto space-y-4 divide-y divide-gray-200 text-sm text-gray-600 md:grid md:grid-cols-2 md:gap-x-6 md:space-y-0 md:divide-y-0'>
           <div className='flex justify-between md:block'>
             <dt className='font-medium text-gray-900'>Workout</dt>
-            <dd className='md:mt-1'>Cardio Day</dd>
+            <dd className='md:mt-1'>Cardio</dd>
           </div>
           <div className='flex justify-between pt-4 md:block md:pt-0'>
             <dt className='font-medium text-gray-900'>Date</dt>
