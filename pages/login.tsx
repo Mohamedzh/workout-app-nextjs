@@ -1,15 +1,17 @@
 import { NextPage } from "next";
-import React from "react";
+import React, { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from 'yup'
 import { useRouter } from "next/router";
 import Link from "next/link";
-import { loginUser, signOut } from "../lib/functions";
+import { loginUser, resetPassword, signOut } from "../lib/functions";
 import { User } from "@supabase/auth-helpers-nextjs";
 
 
-const login: NextPage = ({ user }: { user?: User }) => {
+const Login: NextPage = ({ user }: { user?: User }) => {
   const router = useRouter()
+
+  const [show, setShow] = useState<boolean>(false)
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -108,6 +110,28 @@ const login: NextPage = ({ user }: { user?: User }) => {
                       >
                         Sign in
                       </button>
+                      <p className="cursor-pointer mt-3" onClick={() => setShow(true)}>Forgot your password?</p>
+                      {
+                        show && <div className='mt-1'>
+                          <input
+                            id='forgotEmail'
+                            name='email'
+                            type='email'
+                            // onChange={ }
+                            placeholder="Enter your email"
+                            autoComplete='current-password'
+                            required
+                            className='block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm'
+                          />
+                          <button
+                            type='button'
+                            className='bg-gray-900 flex w-full justify-center rounded-md border border-transparent py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2'
+                            onClick={() => resetPassword(document.getElementById('forgotEmail')?.innerText || '')}
+                          >
+                            Submit
+                          </button>
+                        </div>
+                      }
                     </div>
                   </form>
                 </div>
@@ -141,4 +165,4 @@ const login: NextPage = ({ user }: { user?: User }) => {
   );
 };
 
-export default login;
+export default Login;

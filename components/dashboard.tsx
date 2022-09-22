@@ -3,14 +3,14 @@ import {
 } from '@heroicons/react/20/solid'
 import { getPersonalBest } from '../lib/functions'
 import { useRouter } from 'next/router'
-import { PersonalRecord } from '../types'
+import { PersonalRecords } from '../types'
 import { User } from '@supabase/supabase-js'
 import { useState } from 'react'
 
 
 
 export default function Dashboard({ personalBestRecords, userName, favoriteExercises }: {
-  personalBestRecords: PersonalRecord[], userName: string, favoriteExercises: string[]
+  personalBestRecords: PersonalRecords[], userName: string, favoriteExercises: string[]
 }) {
   const router = useRouter()
 
