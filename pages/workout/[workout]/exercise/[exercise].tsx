@@ -1,7 +1,5 @@
-import { Exercise, WorkoutLine } from "@prisma/client";
+import { Exercise } from "@prisma/client";
 import React, { useEffect, useState } from "react";
-import Header from "../../../../components/header";
-import SideBar from "../../../../components/sideBar";
 import { prisma } from "../../../../db/index";
 import ExerciseDetails from "../../../../components/exerciseDetails";
 import Player from "../../../../components/videoSection";
@@ -9,19 +7,20 @@ import OtherExercises from "../../../../components/otherExercises";
 import LoginModal from "../../../../components/loginModal";
 import { useUser } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/router";
+import Layout from "../../../../components/layout";
 
 function Workout({ currentExercise, setArray, lineId, other
 }: {
   weight: string, currentExercise: Exercise, setArray: [], lineId: string, other: Exercise[]
 }) {
 
-  const { user } = useUser()
+  const { user, isLoading } = useUser()
   const router = useRouter()
   useEffect(() => {
-    if (user === null) {
+    if (user === null && isLoading === false) {
       router.push('/login')
     }
-    // if (user.user === null) {
+    // if (user === null) {
     //   setOpen(true)
     // } else { setOpen(false) }
   }, [user])
@@ -31,9 +30,8 @@ function Workout({ currentExercise, setArray, lineId, other
   return (
     <>
       <div className="bg-slate-200 h-screen">
-        <SideBar />
+        <Layout />
         <div className="flex flex-1 flex-col md:pl-64">
-          <Header />
           <main className="flex-1 pb-10 bg-slate-200 h-screen">
             <div className="py-6">
               <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">

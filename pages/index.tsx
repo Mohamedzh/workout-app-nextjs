@@ -2,25 +2,48 @@ import { Exercise, UserLog, WorkoutLine } from '@prisma/client'
 import { User, withPageAuth } from '@supabase/auth-helpers-nextjs'
 import { useUser } from '@supabase/auth-helpers-react'
 import type { NextPage } from 'next'
+import { useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
+import Charts from '../components/charts'
 import Dashboard from '../components/dashboard'
-import Header from '../components/header'
-import SideBar from '../components/sideBar'
+import Layout from '../components/layout'
 import { prisma } from '../db'
+import { getPersonalRecords } from '../lib/functions'
+import { NewUserLog, PersonalDailyRecords } from '../types'
 
 
 const Home: NextPage = ({ exercises, logs, user, lines }: {
     exercises?: Exercise[],
-    logs?: UserLog[],
+    logs?: NewUserLog[],
     user?: User,
     lines?: WorkoutLine[]
 }) => {
     const userName = user?.user_metadata.name
-
     const userLogs = logs?.filter(line => line.userId === user?.id)
 
-    let exerciseNames = exercises?.map(item => {
-        return item.name
+    console.log(userLogs)
+
+    let userDays: number[] = []
+    userLogs?.map(log => {
+        let day = new Date(log.createdAt).getDate()
+        if (!userDays.includes(day)) {
+            userDays.push(day)
+        }
     })
+    const exerciseNames = exercises?.map(exercise => {
+        return { name: exercise.name, color: exercise.color }
+    })
+
+    const newLogs = userLogs?.map(log => {
+        return { weight: log.weights, day: new Date(log.createdAt).getDate(), exercise: log?.workoutLineRelation?.exerciseRelation?.name }
+    })
+
+
+    const [favoriteExercises, setFavorite] = useState<string[]>(['Squat', 'Bicep Curl', 'Bench Press', 'Overhead Press'])
+
+
+    const favoriteGraphs = getPersonalRecords(userDays, exerciseNames, newLogs)
+        .filter(item => favoriteExercises.find(one => one === item.name))
 
     const userNums = userLogs?.map(log => {
         let workLine = lines?.find(item => item.id === log.workoutLineId)
@@ -32,40 +55,34 @@ const Home: NextPage = ({ exercises, logs, user, lines }: {
     let exerciseRecord = []
     let personalBestRecords = []
     for (let i = 0; i < exerciseNames!.length; i++) {
-        let name = exerciseNames![i]
+        let name = exerciseNames![i].name
+        exerciseRecord = []
         for (let j = 0; j < userNums!.length; j++) {
             if (userNums![j].name === name) {
                 exerciseRecord.push(userNums![j].weight)
-                // { name: userNums![j].weight }
             }
-            // else { console.log(name) }
         }
-        if (exerciseRecord.length > 0) {
-            personalBestRecords.push({ name: exerciseNames![i], weight: Math.max(...exerciseRecord) })
+        if (exerciseRecord.length > 0 && exerciseNames) {
+            personalBestRecords.push({ name: exerciseNames[i].name, weight: Math.max(...exerciseRecord), color: exerciseNames[i].color })
         }
     }
 
     console.log(personalBestRecords)
 
-    // const favouriteExercises = ['Squat', 'Bicep Curl', 'Bench Press', 'Overhead Press']
-    // const colors = ["bg-red-600", "bg-gray-900", "bg-blue-600", "bg-green-600"]
-    // const cards2 = personalBestRecords.filter(item => favouriteExercises.includes(item.name)).map(item=>{
-    //     return {...item, }
-    // })
-    // console.log(cards2)
-
     return (
         <>
             <div className=' bg-slate-200 h-screen'>
-                <SideBar />
+                <Layout />
                 <div className="flex flex-1 flex-col md:pl-64">
-                    <Header />
-                    <main className="flex-1">
+                    <main className="flex-1 bg-slate-200 h-screen">
                         <div className="py-6">
                             <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
                             </div>
                             <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
-                                <Dashboard personalBestRecords={personalBestRecords} userName={userName}/>
+                                <Dashboard personalBestRecords={personalBestRecords} userName={userName} favoriteExercises={favoriteExercises} />
+                                <div className='mt-10'>
+                                    <Charts personalBestRecords={favoriteGraphs!} />
+                                </div>
                             </div>
                         </div>
                     </main>
@@ -80,7 +97,7 @@ export default Home
 export const getServerSideProps = withPageAuth({
     redirectTo: '/login',
     async getServerSideProps() {
-        let logs = await prisma.userLog.findMany();
+        let logs = await prisma.userLog.findMany({ include: { workoutLineRelation: { include: { exerciseRelation: true } } } });
         const exercises = await prisma.exercise.findMany()
         let lines = await prisma.workoutLine.findMany()
         // let lines = await prisma.exercise.findMany({where:{workoutLines:{some:{workoutId:4}}}})

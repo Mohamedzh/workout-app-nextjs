@@ -343,6 +343,7 @@ const signup: NextPage = (props: Props) => {
           alt=''
         />
       </div>
+      <div className="bg-orange-500 bg-slate-500 bg-gray-900 bg-yellow-500 bg-green-500 bg-blue-500"></div>
     </div>
   );
 };

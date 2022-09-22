@@ -8,8 +8,8 @@ const WorkoutHistory = ({
   logs: UserLog[];
 }) => {
   const user = useUser()
-  
-  const userLogs = logs.filter((log)=> log.userId === user.user?.id )
+
+  const userLogs = logs.filter((log) => log.userId === user.user?.id)
   console.log(userLogs)
 
   return (

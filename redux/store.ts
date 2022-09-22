@@ -1,9 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit';
-import exerciseReducer from './slices/exerciseSlice'
+import recordsReducer from './slices/recordsSlice'
 
 export const store = configureStore({
     reducer: {
-        exercise: exerciseReducer,
+        records: recordsReducer,
     }
 })
 

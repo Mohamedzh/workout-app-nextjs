@@ -1,4 +1,4 @@
-import { Exercise } from "@prisma/client"
+import { Exercise, UserLog, Workout, WorkoutLine } from "@prisma/client"
 
 
 export interface Navigation {
@@ -28,3 +28,25 @@ export interface PersonalRecord {
   weight: number
   name: string
 }
+
+export interface NewUserLog extends UserLog {
+  workoutLineRelation: NewWorkoutLine
+}
+export interface NewWorkoutLine extends WorkoutLine {
+  exerciseRelation: Exercise
+  workoutRelation: Workout
+}
+
+export interface PersonalDailyRecords {
+  name: string
+  color: string
+  weights: number[]
+  days: number[]
+}
+
+export interface PersonalRecords {
+  name: string
+  color: string
+  weight: number
+}
+ 
