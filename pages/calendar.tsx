@@ -2,16 +2,15 @@
 import { UserLog, Workout, WorkoutLine, Exercise } from "@prisma/client";
 import { User, withPageAuth } from "@supabase/auth-helpers-nextjs";
 import Calendar from "../components/calendar";
-import Header from "../components/header";
 import Layout from "../components/layout";
-import SideBar from "../components/sideBar";
 import { prisma } from "../db/index";
 import { format, parseISO } from "date-fns";
+import { NewUserLog } from "../types";
 
 export default function CalendarPage({
   logs
 }: {
-  logs: UserLog[]; test: any
+  logs: NewUserLog[]; test: any
 }) {
 
   return (
