@@ -66,7 +66,7 @@ const WorkoutHistory = ({
         </dl>
       </div>
       {currentUserLogs.map((item, index) => (
-        <div>
+        <div key={index}>
           {new Date(item.createdAt).getDate() === selectedDay.getDate() &&
             <div className='my-6 flex rounded-br-3xl rounded-tr-3xl bg-gray-50 shadow sm:rounded-bl-3xl sm:rounded-tl-3xl sm:rounded-tr-none sm:rounded-br-none'>
               <img
