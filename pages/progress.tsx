@@ -12,7 +12,7 @@ import { useDispatch } from 'react-redux'
 import { addRecords } from '../redux/slices/recordsSlice'
 
 
-function progress({ logs, exercises }: { logs: NewUserLog[], exercises: Exercise[] }) {
+function Progress({ logs, exercises }: { logs: NewUserLog[], exercises: Exercise[] }) {
     const { user } = useUser()
 
 
@@ -56,7 +56,7 @@ function progress({ logs, exercises }: { logs: NewUserLog[], exercises: Exercise
     )
 }
 
-export default progress
+export default Progress
 
 export const getServerSideProps = withPageAuth({
     redirectTo: '/login',

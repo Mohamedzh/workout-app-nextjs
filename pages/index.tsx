@@ -42,7 +42,7 @@ const Home: NextPage = ({ exercises, logs, user, lines }: {
     const [favoriteExercises, setFavorite] = useState<string[]>(['Squat', 'Bicep Curl', 'Bench Press', 'Overhead Press'])
 
 
-    const favoriteGraphs = getPersonalRecords(userDays, exerciseNames, newLogs)
+    const favoriteGraphs = getPersonalRecords(userDays, exerciseNames!, newLogs!)
         .filter(item => favoriteExercises.find(one => one === item.name))
 
     const userNums = userLogs?.map(log => {

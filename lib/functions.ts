@@ -2,7 +2,6 @@ import { NextRouter } from 'next/router'
 import axios from 'axios'
 import { supabaseClient } from '@supabase/auth-helpers-nextjs'
 import { PersonalDailyRecords, PersonalRecord, PersonalRecords, SignUp } from '../types'
-import { Dispatch } from '@reduxjs/toolkit'
 import { addRecords } from '../redux/slices/recordsSlice'
 
 

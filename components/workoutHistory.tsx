@@ -12,10 +12,6 @@ const WorkoutHistory = ({
 }) => {
   const user = useUser()
 
-<<<<<<< HEAD
-  const userLogs = logs.filter((log) => log.userId === user.user?.id)
-  console.log(userLogs)
-=======
   const currentUserLogs = logs?.filter((log) => log.userId === user.user?.id)
 
   // let exercises: any = {}
@@ -52,7 +48,6 @@ const WorkoutHistory = ({
       i++
     }
   }
->>>>>>> 39d7ed7f90d5d562a4eac446de5f30f7f023ed55
 
   return (
     <div>
