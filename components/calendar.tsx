@@ -1,6 +1,7 @@
 /* This example requires Tailwind CSS v2.0+ */
 import { Fragment } from "react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/20/solid";
+import { NewUserLog } from "../types";
 import WorkoutHistory from "./workoutHistory";
 import startOfToday from "date-fns/startOfToday";
 import {
@@ -16,9 +17,12 @@ import {
   parse,
   add,
   getDay,
+  parseISO,
+  isSameDay
 } from "date-fns";
 import { useState } from "react";
 import { UserLog, Workout, WorkoutLine, Exercise } from "@prisma/client";
+
 
 const meetings = [
   {
@@ -68,9 +72,9 @@ function classNames(...classes: any) {
 }
 
 export default function Calendar({
-logs
+  logs
 }: {
-  logs: UserLog[];
+  logs: NewUserLog[];
 }) {
   let today = startOfToday();
   let [selectedDay, setSelectedDay] = useState(today);
@@ -97,6 +101,7 @@ logs
       <div className='col-span-6'>
         <WorkoutHistory
           logs={logs}
+          selectedDay={selectedDay}
         />
       </div>
 
@@ -133,43 +138,59 @@ logs
         </div>
         <div className='isolate mt-2 grid grid-cols-7 gap-px rounded-lg bg-gray-200 text-sm shadow ring-1 ring-gray-200'>
           {days.map((day, dayIdx) => (
-            <button
-              key={day.toString()}
-              onClick={() => setSelectedDay(day)}
-              type='button'
-              className={classNames(
-                "py-1.5 hover:bg-gray-100 focus:z-10",
-                isSameMonth(day, today) ? "bg-white" : "bg-gray-50",
-                (isEqual(day, selectedDay) || isToday(day)) && "font-semibold",
-                isEqual(day, selectedDay) &&
-                "text-white hover:bg-red-700 rounded-full bg-red-500",
-                !isEqual(day, selectedDay) &&
-                isSameMonth(day, firstDayOfCurrentMonth) &&
-                !isToday(day) &&
-                "text-gray-900",
-                !isEqual(day, selectedDay) &&
-                !isSameMonth(day, firstDayOfCurrentMonth) &&
-                !isToday(day) &&
-                "text-gray-400",
-                isToday(day) && !isEqual(day, selectedDay) && "text-indigo-600",
-                dayIdx === 0 && "rounded-tl-lg",
-                dayIdx === 0 && "rounded-tl-lg",
-                dayIdx === 6 && "rounded-tr-lg"
-                // dayIdx === day.length - 7 && "rounded-bl-lg",
-                // dayIdx === day.length - 1 && "rounded-br-lg"
-              )}
-            >
-              <time
-                dateTime={format(day, "yyyy-MM-dd")}
+            <>
+              <button
+                key={day.toString()}
+                onClick={() => setSelectedDay(day)}
+                type='button'
                 className={classNames(
-                  "mx-auto flex h-7 w-7 items-center justify-center rounded-full"
-                  // day.isSelected && day.isToday && "bg-indigo-600",
-                  // day.isSelected && !day.isToday && "bg-gray-900"
+                  logs.length > 0 ? "py-1.5 hover:bg-gray-100 focus:z-10" : "py-1.5 hover:bg-gray-100 focus:z-10",
+                  isSameMonth(day, today) ? "bg-white" : "bg-gray-50",
+                  (isEqual(day, selectedDay) || isToday(day)) && "font-semibold",
+                  isEqual(day, selectedDay) &&
+                  "text-white hover:bg-red-700 rounded-full bg-red-500",
+                  !isEqual(day, selectedDay) &&
+                  isSameMonth(day, firstDayOfCurrentMonth) &&
+                  !isToday(day) &&
+                  "text-gray-900",
+                  !isEqual(day, selectedDay) &&
+                  !isSameMonth(day, firstDayOfCurrentMonth) &&
+                  !isToday(day) &&
+                  "text-gray-400",
+                  isToday(day) && !isEqual(day, selectedDay) && "text-indigo-600",
+                  dayIdx === 0 && "rounded-tl-lg",
+                  dayIdx === 0 && "rounded-tl-lg",
+                  dayIdx === 6 && "rounded-tr-lg",
+                  
+                    logs.some(log => {
+                      new Date(log.createdAt).getDate() === day.getDate() && log.reps > 0 ? "dot" : ""
+                    })
+                  /* 
+<div className="w-1 h-1 mx-auto mt-1 rounded-full bg-sky-500"></div> */
+
+
+                  /* { }
+                                logs.some(log => isSameDay(new Date(log.createdAt).getDate(), day.getDate()))
+                                 console.log(new Date(logs[0].createdAt).getDate())
+                                }
+                                 {console.log(logs.some(log => isSameDay(new Date(log.createdAt).getDate(), day.getDate())))}
+                                 { logs.filter(log => {
+                                      new Date(log.createdAt).getDate() === day.getDate() && log.length > 0 ? "dot" : ""
+                                    }) } */
+
                 )}
               >
-                {format(day, "d")}
-              </time>
-            </button>
+                <time
+                  dateTime={format(day, "yyyy-MM-dd")}
+                  className={classNames(
+                    "mx-auto flex h-7 w-7 items-center justify-center rounded-full"
+                  )}
+                >
+                  {format(day, "d")}
+                </time>
+              </button>
+            </>
+
           ))}
         </div>
       </div>
@@ -186,3 +207,5 @@ let colStartClasses = [
   "col-start-6",
   "col-start-7",
 ];
+
+

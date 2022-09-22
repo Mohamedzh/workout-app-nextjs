@@ -6,13 +6,14 @@ import Header from "../components/header";
 import Layout from "../components/layout";
 import SideBar from "../components/sideBar";
 import { prisma } from "../db/index";
+import { format, parseISO } from "date-fns";
 
 export default function CalendarPage({
   logs
 }: {
-  logs: UserLog[];
+  logs: UserLog[]; test: any
 }) {
-  console.log(logs)
+
   return (
     <>
       <div className=" bg-slate-200 h-screen">
@@ -40,9 +41,6 @@ export const getServerSideProps = withPageAuth({
   async getServerSideProps() {
     console.log("object");
     const logs = await prisma?.userLog.findMany({ include: { workoutLineRelation: { include: { exerciseRelation: true, workoutRelation: true } } } });
-    // const logs = await prisma.workoutLine.findMany({include: {userLogs: true}});
-    console.log("hi", logs)
-    // );
     return { props: { logs: JSON.parse(JSON.stringify(logs)) } };
   },
 });

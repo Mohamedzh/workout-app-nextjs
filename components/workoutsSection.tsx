@@ -41,3 +41,16 @@ function WorkoutsSection({ workouts }: Props) {
 }
 
 export default WorkoutsSection
+
+// let exercises: any = {}
+// let newArr: any = []
+// currentUserLogs.map((item) => {
+//   let exerciseName = item.workoutLineRelation.exerciseRelation.name
+//   const set = { exerciseName, reps: item.workoutLineRelation.recReps, weight: item.workoutLineRelation.recWeights }
+//   newArr.push(set)
+//   if (exercises.exerciseName) {
+//     exercises.exerciseName = newArr
+//   } else {
+//         exercises = {...exercises, exerciseName: newArr}
+//   }
+// })
