@@ -53,6 +53,7 @@ function Workout({ currentExercises }: { currentExercises: ExerciseWithSets[] })
 export default Workout;
 
 export async function getStaticPaths() {
+    console.log("hi")
     const workouts = await prisma.workout.findMany();
     const paths = workouts.map((item) => ({
         params: { workout: item.id.toString() },
