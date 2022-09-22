@@ -1,62 +1,52 @@
+import { Exercise } from '@prisma/client'
 import { withPageAuth } from '@supabase/auth-helpers-nextjs'
-import React from 'react'
-import Header from '../components/header'
-import SideBar from '../components/sideBar'
-import StockChart from '../components/stockChart'
+import { useUser } from '@supabase/auth-helpers-react'
+import React, { useEffect } from 'react'
+import { prisma } from '../db/index'
+import StockChart from '../components/chartSettings'
+import Layout from '../components/layout'
+import { NewUserLog, PersonalDailyRecords } from '../types'
+import { getExerciseData, getPersonalRecords } from '../lib/functions'
+import Charts from '../components/charts'
+import { useDispatch } from 'react-redux'
+import { addRecords } from '../redux/slices/recordsSlice'
 
-type Props = {}
 
-function progress({ }: Props) {
+function progress({ logs, exercises }: { logs: NewUserLog[], exercises: Exercise[] }) {
+    const { user } = useUser()
 
-    const data = {
-        chartData: {
-            labels: [
-                "10:00",
-                "",
-                "",
-                "",
-                "12:00",
-                "",
-                "",
-                "",
-                "2:00",
-                "",
-                "",
-                "",
-                "4:00",
-            ],
-            data: [
-                2.23,
-                2.215,
-                2.22,
-                2.25,
-                2.245,
-                2.27,
-                2.28,
-                2.29,
-                2.3,
-                2.29,
-                2.325,
-                2.325,
-                2.32,
-            ],
-        },
-    };
+
+    const currentUserLogs = logs?.filter(log => log.userId === user?.id)
+
+    let userDays: number[] = []
+    currentUserLogs?.map(log => {
+        let day = new Date(log.createdAt).getDate()
+        if (!userDays.includes(day)) {
+            userDays.push(day)
+        }
+    })
+
+    const exerciseNames = exercises?.map(exercise => {
+        return { name: exercise.name, color: exercise.color }
+    })
+
+    const newLogs = currentUserLogs?.map(log => {
+        return { weight: log.weights, day: new Date(log.createdAt).getDate(), exercise: log?.workoutLineRelation?.exerciseRelation?.name }
+    })
+
 
     return (
         <>
             <div className='bg-slate-200 h-screen'>
-                <SideBar />
+                <Layout />
                 <div className="flex flex-1 flex-col md:pl-64">
-                    <Header />
-                    <main className="flex-1 ">
+                    <main className="flex-1 bg-slate-200">
                         <div className="py-6">
                             <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
+                                <p className='text-4xl font-black'>My progress</p>
                             </div>
-                            <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
-                                <div className="min-w-screen min-h-screen bg-blue-500  flex items-center justify-center px-5 py-5">
-                                    <StockChart info={data} />
-                                </div>
+                            <div>
+                                <Charts personalBestRecords={getPersonalRecords(userDays, exerciseNames, newLogs)} />
                             </div>
                         </div>
                     </main>
@@ -68,4 +58,11 @@ function progress({ }: Props) {
 
 export default progress
 
-export const getServerSideProps = withPageAuth({ redirectTo: '/login' })
+export const getServerSideProps = withPageAuth({
+    redirectTo: '/login',
+    async getServerSideProps() {
+        const logs = await prisma.userLog.findMany({ include: { workoutLineRelation: { include: { exerciseRelation: { select: { name: true } } } } } })
+        const exercises = await prisma.exercise.findMany()
+        return { props: { logs: JSON.parse(JSON.stringify(logs)), exercises } }
+    }
+})

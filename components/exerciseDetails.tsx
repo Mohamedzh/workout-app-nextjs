@@ -1,6 +1,7 @@
+import { CheckCircleIcon } from '@heroicons/react/20/solid'
 import { useFormik } from 'formik'
 import React, { useEffect } from 'react'
-import { useLayoutEffect, useRef, useState } from 'react'
+import { useState } from 'react'
 import { CountdownCircleTimer } from 'react-countdown-circle-timer'
 import { addUserLog, classNames } from '../lib/functions'
 import Notification from './notification'
@@ -15,9 +16,8 @@ function ExerciseDetails({ setArray, lineId }: Props) {
     const [startButton, setStartButton] = useState<string>("Start Timer")
 
     const [index, setIndex] = useState<number>(0)
-    const [selectedSet, setSelectedSet] = useState<{ reps: string, weight: string }>()
 
-    useEffect(() => { setStartButton(start ? "Stop" : "Start Timer"); console.log(index, lineId) }, [start])
+    useEffect(() => { setStartButton(start ? "Stop" : "Start Timer") }, [start])
 
     const formik = useFormik({
         initialValues: {
@@ -50,22 +50,6 @@ function ExerciseDetails({ setArray, lineId }: Props) {
                     <div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
                         <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
                             <div className="relative overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
-                                {/* {selectedSets.length > 0 && (
-                                <div className="absolute top-0 left-12 flex h-12 items-center space-x-3 bg-gray-50 sm:left-16">
-                                    <button
-                                        type="button"
-                                        className="inline-flex items-center rounded border border-gray-300 bg-white px-2.5 py-1.5 text-xs font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-30"
-                                    >
-                                        Bulk edit
-                                    </button>
-                                    <button
-                                        type="button"
-                                        className="inline-flex items-center rounded border border-gray-300 bg-white px-2.5 py-1.5 text-xs font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-30"
-                                    >
-                                        Delete all
-                                    </button>
-                                </div>
-                            )} */}
                                 <table className="min-w-full table-fixed divide-y divide-gray-300">
                                     <thead className="bg-gray-50">
                                         <tr>
@@ -96,7 +80,9 @@ function ExerciseDetails({ setArray, lineId }: Props) {
                                                 <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><label htmlFor="email" className="sr-only">
                                                     weight
                                                 </label>
-                                                    <input
+                                                    {set.disabled ? <div className="flex-shrink-0">
+                                                        <CheckCircleIcon className="h-5 w-5 text-green-400" aria-hidden="true" />
+                                                    </div> : <input
                                                         type="number"
                                                         name="weight"
                                                         id="weight"
@@ -104,14 +90,15 @@ function ExerciseDetails({ setArray, lineId }: Props) {
                                                         onChange={formik.handleChange}
                                                         value={formik.values.weight}
                                                         className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2"
-                                                        placeholder={set.weight}
                                                         disabled={set.disabled}
-                                                    />
+                                                    />}
                                                 </td>
                                                 <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><label htmlFor="email" className="sr-only">
                                                     reps
                                                 </label>
-                                                    <input
+                                                    {set.disabled ? <div className="flex-shrink-0">
+                                                        <CheckCircleIcon className="h-5 w-5 text-green-400" aria-hidden="true" />
+                                                    </div> : <input
                                                         type="number"
                                                         name="reps"
                                                         id="reps"
@@ -119,9 +106,8 @@ function ExerciseDetails({ setArray, lineId }: Props) {
                                                         onChange={formik.handleChange}
                                                         value={formik.values.reps}
                                                         className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2"
-                                                        placeholder={set.reps}
                                                         disabled={set.disabled}
-                                                    />
+                                                    />}
                                                 </td>
                                                 <td className="relative w-12 px-6 sm:w-16 sm:px-8">
                                                     {!set.disabled && <input
@@ -132,7 +118,6 @@ function ExerciseDetails({ setArray, lineId }: Props) {
                                                         disabled={set.disabled}
                                                         onChange={(e) => {
                                                             set.disabled = true
-                                                            setSelectedSet(set)
                                                             setIndex(idx)
                                                             formik.handleSubmit()
                                                         }

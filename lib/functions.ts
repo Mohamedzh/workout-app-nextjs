@@ -1,25 +1,30 @@
-import { Exercise, WorkoutLine } from '@prisma/client'
 import { NextRouter } from 'next/router'
 import axios from 'axios'
 import { supabaseClient } from '@supabase/auth-helpers-nextjs'
-import { PersonalRecord, SignUp } from '../types'
+import { PersonalDailyRecords, PersonalRecord, PersonalRecords, SignUp } from '../types'
+import { Dispatch } from '@reduxjs/toolkit'
+import { addRecords } from '../redux/slices/recordsSlice'
 
 
 export const signupUser = async (router: NextRouter, email: string, password: string, body: SignUp) => {
-    const res = await supabaseClient.auth.signUp({ email, password }, { data: { name: body.firstName + " " + body.lastName } })
+    await supabaseClient.auth.signUp({ email, password }, { data: { name: body.firstName + " " + body.lastName } })
     await supabaseClient.auth.signIn({ email, password, }, { redirectTo: '/' })
     await axios.post("/api/signup", body)
     router.push('/')
 }
 
+export const resetPassword = (email: string) => {
+    supabaseClient.auth.api.resetPasswordForEmail(email, { redirectTo: '/' })
+}
+
 export const loginUser = async (router: NextRouter, email: string, password: string) => {
-    const res = await supabaseClient.auth.signIn({ email, password, }, { redirectTo: '/' })
+    await supabaseClient.auth.signIn({ email, password }, { redirectTo: '/' })
     router.push('/')
 }
 
 export const signOut = async (router: NextRouter) => {
     try {
-        const res = await supabaseClient.auth.signOut()
+        await supabaseClient.auth.signOut()
         router.push('/login')
     } catch (error) {
         console.log(error)
@@ -39,4 +44,74 @@ export const addUserLog = async (rep: string, weight: string, index: number, lin
 export const getPersonalBest = (exercise: string, arr: PersonalRecord[]) => {
     let targetExercise = arr.find(item => item.name === exercise)
     return targetExercise?.weight
+}
+
+export const getDaysInCurrentMonth = () => {
+    const date = new Date();
+    return new Date(
+        date.getFullYear(),
+        date.getMonth() + 1,
+        0
+    ).getDate();
+}
+
+export const getExerciseData = (exercise: string, personalBestRecords: PersonalDailyRecords[]) => {
+    const labels = Array.from(Array(getDaysInCurrentMonth()).keys())
+    let data
+    let graphData = []
+    let currentExercise = personalBestRecords.find(item => item.name === exercise)
+
+    for (let i = 0; i < labels.length; i++) {
+        let target = currentExercise?.days.find(log => log === i)
+        if (target) {
+            graphData.push(currentExercise?.weights[currentExercise?.days.indexOf(i)])
+        } else graphData.push(0)
+    }
+    data = {
+        chartData: {
+            labels,
+            data: graphData,
+        },
+        name: exercise
+    }
+    return data
+}
+
+export const getPersonalRecords = (
+    userDays: number[],
+    exerciseNames: { name: string, color: string }[],
+    newLogs: { weight: number, day: number, exercise: string }[]
+) => {
+    let personalBestRecords: PersonalDailyRecords[] = []
+    let exerciseRecord = []
+    let exerciseDay: number[] = []
+    for (let i = 0; i < exerciseNames.length; i++) {
+        let name = exerciseNames[i].name
+        exerciseRecord = []
+        exerciseDay = []
+        for (let k = 0; k < userDays.length; k++) {
+            let currentDay = userDays[k]
+            for (let j = 0; j < newLogs.length; j++) {
+                if (newLogs[j].exercise === name && newLogs[j].day === currentDay) {
+                    exerciseRecord.push(newLogs[j].weight)
+                    exerciseDay.push(newLogs[j].day)
+                }
+            }
+            if (exerciseRecord.length > 0) {
+                let test2 = personalBestRecords.find(item => item.name === exerciseNames[i].name)
+                if (!test2) {
+                    personalBestRecords.push({
+                        name: exerciseNames[i].name,
+                        color: exerciseNames[i].color,
+                        weights: [Math.max(...exerciseRecord)],
+                        days: [exerciseDay[exerciseRecord.indexOf(Math.max(...exerciseRecord))]]
+                    })
+                } else {
+                    test2.days.push(Math.max(...exerciseRecord))
+                    test2.weights.push(exerciseDay[exerciseRecord.indexOf(Math.max(...exerciseRecord))])
+                }
+            }
+        }
+    }
+    return personalBestRecords
 }

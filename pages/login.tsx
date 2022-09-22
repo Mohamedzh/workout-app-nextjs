@@ -133,7 +133,7 @@ const login: NextPage = ({ user }: { user?: User }) => {
           <img
             className='absolute inset-0 h-full w-full object-cover'
             src='/login.jpg'
-            alt=''
+            alt='workout login pic'
           />
         </div>
       </div>

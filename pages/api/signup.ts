@@ -8,11 +8,10 @@ import { prisma } from "../../db/index";
 export default async function CreateUser(req: NextApiRequest, res: NextApiResponse) {
   try {
     const { firstName, lastName, email, weight, height, gender, age, } = req.body;
-    const current = await getUser({ req, res })
-    console.log(current.user.id)
+    const { user } = await getUser({ req, res })
     const newUser = await prisma.user.create({
       data: {
-        id: current.user.id,
+        id: user.id,
         firstName,
         lastName,
         email,

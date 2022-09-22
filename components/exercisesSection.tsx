@@ -1,5 +1,4 @@
 import React from 'react'
-import { Exercise } from "@prisma/client";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { ExerciseWithSets } from '../types';
@@ -32,9 +31,6 @@ function ExercisesSection({ currentExercises }: { currentExercises: ExerciseWith
                                     <p className="text-xl">{product.name}</p>
                                     <p className='my-2 text-gray-400 text-base italic'>{product.sets} sets X {product.reps} reps</p>
                                 </div>
-                                {/* <p className='mt-1 text-sm italic text-gray-500'>
-                            {product.name}
-                          </p> */}
                             </a>
                         </Link>
                     ))}

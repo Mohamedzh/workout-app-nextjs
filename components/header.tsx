@@ -1,11 +1,13 @@
-import React, { Fragment, useEffect, useState } from 'react'
+import React, { Dispatch, Fragment, SetStateAction, useEffect } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import {
     Bars3BottomLeftIcon,
 } from '@heroicons/react/24/outline'
-import { classNames, signOut } from '../lib/functions'
+import { classNames, getPersonalRecords, signOut } from '../lib/functions'
 import { useRouter } from 'next/router'
 import { useUser } from '@supabase/auth-helpers-react'
+import { useDispatch } from 'react-redux'
+
 
 const userNavigation = [
     { name: 'Your Profile', href: '#' },
@@ -14,18 +16,11 @@ const userNavigation = [
 ]
 
 
-function Header() {
-
+function Header({ setSidebarOpen }: { setSidebarOpen: Dispatch<SetStateAction<boolean>> }) {
     const { user } = useUser()
     const userName = user?.user_metadata.name
-    const [sidebarOpen, setSidebarOpen] = useState(false)
     const router = useRouter()
-    useEffect(() => {
-        console.log(user)
-        // if(user){
-        //     dispatch(addUser(user))
-        // }
-    }, [user])
+    const dispatch = useDispatch()
 
     return (
         <div className="sticky top-0 z-10 flex h-16 flex-shrink-0 bg-white shadow">

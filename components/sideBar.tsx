@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Dispatch, SetStateAction, useEffect } from 'react'
 import { Fragment, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import {
@@ -20,15 +20,9 @@ const navigation = [
     { name: 'Progress', href: '/progress', icon: ChartBarIcon, current: false },
 ]
 
-const userNavigation = [
-    { name: 'Your Profile', href: '#' },
-    { name: 'Settings', href: '#' },
-    { name: 'Sign out', href: '#' },
-]
-type Props = {}
 
-function sideBar({ }: Props) {
-    const [sidebarOpen, setSidebarOpen] = useState(false)
+function sideBar({ sidebarOpen, setSidebarOpen }: { sidebarOpen: boolean, setSidebarOpen: Dispatch<SetStateAction<boolean>> }) {
+
     const highlight = (item: Navigation) => {
         item.current = true
         navigation.filter(title => title.name !== item.name).map(entry => entry.current = false)

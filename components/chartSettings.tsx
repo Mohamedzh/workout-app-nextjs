@@ -4,9 +4,8 @@ import { Chart as ChartJS, LineElement, PointElement, LinearScale, Title, Catego
 import React from 'react';
 
 ChartJS.register(LineElement, PointElement, LinearScale, Title, CategoryScale);
-// const formatter = (number) => (number > 999999 ? (number / 1000000).toFixed(1) + 'M' : number);
 
-const buildData = ({ chartData }) => ({
+const buildData = ({ chartData }: { chartData: any }) => ({
     labels: chartData.labels,
     datasets: [
         {
@@ -24,7 +23,7 @@ const buildData = ({ chartData }) => ({
 const options = {
     plugins: {
         legend: {
-            display: false,
+            display: true,
         }
     },
     scales: {
@@ -52,20 +51,21 @@ const options = {
     },
     layout: {
         padding: {
-            right: 10,
+            right: 15,
+            left: 15,
+            top: 20,
+            bottom: 10,
         },
     },
 };
 
-const StockChart = ({ info }) => {
+const StockChart = ({ info, color }: { info: any, color: string }) => {
     const data = buildData(info);
 
     return (
         <>
-            <div className="rounded shadow-xl overflow-hidden w-full md:flex" style={{ maxWidth: '900px' }}>
-                <div className="flex w-full md:w-1/2 px-5 pb-4 pt-8 bg-indigo-500 text-white items-center">
-                    <Line type="line" data={data} options={options} />
-                </div>
+            <div className={`flex rounded min-h-max min-w-full md:w-1/2 ${color} text-white items-center`}>
+                <Line data={data} options={options} />
             </div>
         </>
     );

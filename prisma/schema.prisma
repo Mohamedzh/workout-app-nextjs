@@ -44,6 +44,7 @@ model Exercise {
   videoUrl     String
   href         String        @default("/exercise")
   workoutLines WorkoutLine[]
+  color        String        @default("bg-gray-900")
 }
 
 model WorkoutLine {

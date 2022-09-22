@@ -1,12 +1,10 @@
 import { Exercise } from "@prisma/client";
 import { useUser } from "@supabase/auth-helpers-react";
-import Link from "next/link";
-import Router, { useRouter } from "next/router";
+import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import ExercisesSection from "../../../components/exercisesSection";
-import Header from "../../../components/header";
+import Layout from "../../../components/layout";
 import LoginModal from "../../../components/loginModal";
-import SideBar from "../../../components/sideBar";
 import { prisma } from "../../../db/index";
 import { ExerciseWithSets } from "../../../types";
 
@@ -31,9 +29,8 @@ function Workout({ currentExercises }: { currentExercises: ExerciseWithSets[] })
     return (
         <>
             <div className="bg-slate-200 h-screen">
-                <SideBar />
+                <Layout />
                 <div className='flex flex-1 flex-col md:pl-64'>
-                    <Header />
                     <main className='flex-1 bg-slate-200 h-screen'>
                         <div className='py-6'>
                             <div className='mx-auto max-w-7xl px-4 sm:px-6 md:px-8'>

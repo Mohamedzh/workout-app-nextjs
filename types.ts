@@ -36,3 +36,17 @@ export interface NewWorkoutLine extends WorkoutLine {
   exerciseRelation: Exercise
   workoutRelation: Workout
 }
+
+export interface PersonalDailyRecords {
+  name: string
+  color: string
+  weights: number[]
+  days: number[]
+}
+
+export interface PersonalRecords {
+  name: string
+  color: string
+  weight: number
+}
+ 
