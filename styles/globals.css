@@ -1,3 +1,21 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+.dot {
+    position: relative;
+}
+
+
+.dot:before {
+    content: "";
+    position: absolute !important;
+    width: 4px;
+    height: 4px;
+    background-color: blue;
+    bottom: 5px;
+    left: 50%;
+    border-radius: 50%;
+}
+
