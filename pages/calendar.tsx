@@ -1,10 +1,8 @@
 // import { UserLog } from "@prisma/client";
-import { UserLog, Workout, WorkoutLine, Exercise } from "@prisma/client";
 import { User, withPageAuth } from "@supabase/auth-helpers-nextjs";
 import Calendar from "../components/calendar";
 import Layout from "../components/layout";
 import { prisma } from "../db/index";
-import { format, parseISO } from "date-fns";
 import { NewUserLog } from "../types";
 
 export default function CalendarPage({
@@ -38,7 +36,6 @@ export default function CalendarPage({
 export const getServerSideProps = withPageAuth({
   redirectTo: "/login",
   async getServerSideProps() {
-    console.log("object");
     const logs = await prisma?.userLog.findMany({ include: { workoutLineRelation: { include: { exerciseRelation: true, workoutRelation: true } } } });
     return { props: { logs: JSON.parse(JSON.stringify(logs)) } };
   },

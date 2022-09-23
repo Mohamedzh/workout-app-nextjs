@@ -1,8 +1,7 @@
 import { NextRouter } from 'next/router'
 import axios from 'axios'
 import { supabaseClient } from '@supabase/auth-helpers-nextjs'
-import { PersonalDailyRecords, PersonalRecord, PersonalRecords, SignUp } from '../types'
-import { addRecords } from '../redux/slices/recordsSlice'
+import { PersonalDailyRecords, PersonalRecord, SignUp } from '../types'
 
 
 export const signupUser = async (router: NextRouter, email: string, password: string, body: SignUp) => {
@@ -12,13 +11,31 @@ export const signupUser = async (router: NextRouter, email: string, password: st
     router.push('/')
 }
 
-export const resetPassword = (email: string) => {
-    supabaseClient.auth.api.resetPasswordForEmail(email, { redirectTo: '/' })
+export const resetPassword = async (email: string) => {
+    const res = await supabaseClient.auth.api.resetPasswordForEmail(email, { redirectTo: "/login" })
+    console.log(res);
+}
+
+export const changePassword = async (password: string) => {
+    const { data, error } = await supabaseClient.auth.update({
+        password,
+    })
+    if (data) alert("Password updated successfully!")
+    if (error) alert("There was an error updating your password.")
 }
 
 export const loginUser = async (router: NextRouter, email: string, password: string) => {
-    await supabaseClient.auth.signIn({ email, password }, { redirectTo: '/' })
-    router.push('/')
+    try {
+        const { user, error } = await supabaseClient.auth.signIn({ email, password }, { redirectTo: '/' })
+        if (error) { return error }
+        else {
+            router.push('/')
+            return user
+        }
+    } catch (error) {
+        console.log(error)
+    }
+
 }
 
 export const signOut = async (router: NextRouter) => {
@@ -97,8 +114,8 @@ export const getPersonalRecords = (
                 }
             }
             if (exerciseRecord.length > 0) {
-                let test2 = personalBestRecords.find(item => item.name === exerciseNames[i].name)
-                if (!test2) {
+                let target = personalBestRecords.find(item => item.name === exerciseNames[i].name)
+                if (!target) {
                     personalBestRecords.push({
                         name: exerciseNames[i].name,
                         color: exerciseNames[i].color,
@@ -106,8 +123,8 @@ export const getPersonalRecords = (
                         days: [exerciseDay[exerciseRecord.indexOf(Math.max(...exerciseRecord))]]
                     })
                 } else {
-                    test2.days.push(Math.max(...exerciseRecord))
-                    test2.weights.push(exerciseDay[exerciseRecord.indexOf(Math.max(...exerciseRecord))])
+                    target.days.push(Math.max(...exerciseRecord))
+                    target.weights.push(exerciseDay[exerciseRecord.indexOf(Math.max(...exerciseRecord))])
                 }
             }
         }
