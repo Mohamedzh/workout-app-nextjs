@@ -14,18 +14,20 @@ function Workout({ currentExercise, setArray, lineId, other
   weight: string, currentExercise: Exercise, setArray: [], lineId: string, other: Exercise[]
 }) {
 
+  const [open, setOpen] = useState(false)
   const { user, isLoading } = useUser()
   const router = useRouter()
   useEffect(() => {
+    // if (user === null && isLoading === false) {
+    //   router.push('/login')
+    // }
     if (user === null && isLoading === false) {
-      router.push('/login')
+      setOpen(true)
+    } else {
+      setOpen(false)
     }
-    // if (user === null) {
-    //   setOpen(true)
-    // } else { setOpen(false) }
   }, [user])
 
-  const [open, setOpen] = useState(true)
 
   return (
     <>
@@ -38,7 +40,7 @@ function Workout({ currentExercise, setArray, lineId, other
               </div>
               <div className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
                 <div className="mb-10">
-                  {/* <LoginModal open={open} setOpen={setOpen} /> */}
+                  <LoginModal open={open} setOpen={setOpen} />
                   <Player currentExercise={currentExercise} setArray={setArray} />
                 </div>
                 <ExerciseDetails setArray={setArray} lineId={lineId} />
