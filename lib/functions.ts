@@ -13,7 +13,6 @@ export const signupUser = async (router: NextRouter, email: string, password: st
 
 export const resetPassword = async (email: string) => {
     const res = await supabaseClient.auth.api.resetPasswordForEmail(email, { redirectTo: "/login" })
-    console.log(res);
 }
 
 export const changePassword = async (password: string) => {
