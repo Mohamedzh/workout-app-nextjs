@@ -7,7 +7,6 @@ import startOfToday from "date-fns/startOfToday";
 import {
   format,
   eachDayOfInterval,
-  startOfMonth,
   endOfMonth,
   startOfWeek,
   endOfWeek,
@@ -16,9 +15,6 @@ import {
   isEqual,
   parse,
   add,
-  getDay,
-  parseISO,
-  isSameDay
 } from "date-fns";
 import { useState } from "react";
 import { UserLog, Workout, WorkoutLine, Exercise } from "@prisma/client";
@@ -85,6 +81,8 @@ export default function Calendar({
     start: startOfWeek(firstDayOfCurrentMonth),
     end: endOfWeek(endOfMonth(firstDayOfCurrentMonth)),
   });
+
+ 
 
   function nextMonth() {
     let firstDayOfNextMonth = add(firstDayOfCurrentMonth, { months: 1 });
@@ -165,19 +163,6 @@ export default function Calendar({
                     logs.some(log => {
                       new Date(log.createdAt).getDate() === day.getDate() && log.reps > 0 ? "dot" : ""
                     })
-                  /* 
-<div className="w-1 h-1 mx-auto mt-1 rounded-full bg-sky-500"></div> */
-
-
-                  /* { }
-                                logs.some(log => isSameDay(new Date(log.createdAt).getDate(), day.getDate()))
-                                 console.log(new Date(logs[0].createdAt).getDate())
-                                }
-                                 {console.log(logs.some(log => isSameDay(new Date(log.createdAt).getDate(), day.getDate())))}
-                                 { logs.filter(log => {
-                                      new Date(log.createdAt).getDate() === day.getDate() && log.length > 0 ? "dot" : ""
-                                    }) } */
-
                 )}
               >
                 <time
