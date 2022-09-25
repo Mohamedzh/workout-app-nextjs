@@ -45,7 +45,7 @@ function ExerciseDetails({ setArray, lineId }: Props) {
                     </button>
                 </div> */}
             </div>
-            <div className='flex justify-evenly'>
+            <div className='grid grid-cols-1 lg:grid-cols-2'>
                 <div className="mt-8 flex flex-col flex-1">
                     <div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
                         <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
@@ -133,7 +133,7 @@ function ExerciseDetails({ setArray, lineId }: Props) {
                         </div>
                     </div>
                 </div>
-                <div className='mx-12'>
+                <div className='mx-12 my-12 flex flex-col place-items-center'>
                     <CountdownCircleTimer
                         isPlaying={start}
                         duration={30}

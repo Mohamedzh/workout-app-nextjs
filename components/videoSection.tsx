@@ -14,8 +14,8 @@ const Player = ({
     }
 
     const opts: YouTubeProps['opts'] = {
-        height: '390',
-        width: '640',
+        // height: '100%',
+        width: '100%',
         playerVars: {
             // https://developers.google.com/youtube/player_parameters
             autoplay: 1,
@@ -23,8 +23,8 @@ const Player = ({
     };
 
     return (
-        <div className='flex'>
-            <div>
+        <div className='grid grid-cols-1 lg:grid-cols-2'>
+            <div className='aspect-video min-h-full md:w-96 min-w-full w-64'>
                 <YouTube videoId={currentExercise.videoUrl} opts={opts} onReady={onPlayerReady} />
             </div>
             <div className='mx-10'>

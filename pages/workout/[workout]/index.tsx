@@ -1,4 +1,4 @@
-import { Exercise } from "@prisma/client";
+import { Exercise, WorkoutLine } from "@prisma/client";
 import { useUser } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
@@ -9,10 +9,17 @@ import { prisma } from "../../../db/index";
 import { ExerciseWithSets } from "../../../types";
 
 
-function Workout({ currentExercises }: { currentExercises: ExerciseWithSets[] }) {
+export interface AddedExercises extends WorkoutLine {
+    exerciseRelation: Exercise
+    workoutRelation: { name: string }
+}
+
+function Workout({ exercises }: { exercises: AddedExercises[] }) {
     const { user } = useUser()
     const [open, setOpen] = useState(false)
     const router = useRouter()
+    console.log(exercises);
+
 
     useEffect(() => {
         if (user === null) {
@@ -36,7 +43,7 @@ function Workout({ currentExercises }: { currentExercises: ExerciseWithSets[] })
                                 <LoginModal open={open} setOpen={setOpen} />
                             </div>
                             <div className='mx-auto max-w-7xl px-4 sm:px-6 md:px-8'>
-                                <ExercisesSection currentExercises={currentExercises} />
+                                <ExercisesSection exercises={exercises} />
                             </div>
                         </div>
                     </main>
@@ -65,22 +72,10 @@ export async function getStaticProps({
 }: {
     params: { workout: string };
 }) {
-    const exercises = await prisma.workoutLine.findMany();
+    const exercises = await prisma.workoutLine.findMany({ include: { exerciseRelation: true, workoutRelation: { select: { name: true } } } });
     const currentWorkoutExercises = exercises.filter(
         (line) => line.workoutId === +params.workout
     );
-    let currentExercises: Exercise[] = [];
-    for (let i = 0; i < currentWorkoutExercises.length; i++) {
-        const target = await prisma.exercise.findFirst({
-            where: { id: currentWorkoutExercises[i].exerciseId },
-        });
-        if (target) currentExercises.push(target);
-    }
 
-    currentExercises = currentExercises.map(exercise => {
-        let newLine = currentWorkoutExercises.find(item => item.exerciseId === exercise.id)
-        return { ...exercise, reps: newLine?.recReps, sets: newLine?.recSets }
-    })
-
-    return { props: { currentExercises } };
+    return { props: { exercises: JSON.parse(JSON.stringify(currentWorkoutExercises)) } };
 }
