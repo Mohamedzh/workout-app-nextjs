@@ -16,7 +16,7 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
 
-const signup: NextPage = (props: Props) => {
+const Signup: NextPage = (props: Props) => {
   const router = useRouter()
   const [selected, setSelected] = useState(Genders[0]);
   const formik = useFormik({
@@ -348,4 +348,4 @@ const signup: NextPage = (props: Props) => {
   );
 };
 
-export default signup;
+export default Signup;

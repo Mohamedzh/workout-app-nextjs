@@ -6,7 +6,6 @@ import {
 import { classNames, getPersonalRecords, signOut } from '../lib/functions'
 import { useRouter } from 'next/router'
 import { useUser } from '@supabase/auth-helpers-react'
-import { useDispatch } from 'react-redux'
 
 
 const userNavigation = [
@@ -20,7 +19,6 @@ function Header({ setSidebarOpen }: { setSidebarOpen: Dispatch<SetStateAction<bo
     const { user } = useUser()
     const userName = user?.user_metadata.name
     const router = useRouter()
-    const dispatch = useDispatch()
 
     return (
         <div className="sticky top-0 z-10 flex h-16 flex-shrink-0 bg-white shadow">

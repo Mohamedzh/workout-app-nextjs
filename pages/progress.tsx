@@ -1,20 +1,16 @@
 import { Exercise } from '@prisma/client'
 import { withPageAuth } from '@supabase/auth-helpers-nextjs'
 import { useUser } from '@supabase/auth-helpers-react'
-import React, { useEffect } from 'react'
+import React from 'react'
 import { prisma } from '../db/index'
-import StockChart from '../components/chartSettings'
 import Layout from '../components/layout'
-import { NewUserLog, PersonalDailyRecords } from '../types'
-import { getExerciseData, getPersonalRecords } from '../lib/functions'
+import { NewUserLog } from '../types'
+import { getPersonalRecords } from '../lib/functions'
 import Charts from '../components/charts'
-import { useDispatch } from 'react-redux'
-import { addRecords } from '../redux/slices/recordsSlice'
 
 
-function progress({ logs, exercises }: { logs: NewUserLog[], exercises: Exercise[] }) {
+function Progress({ logs, exercises }: { logs: NewUserLog[], exercises: Exercise[] }) {
     const { user } = useUser()
-
 
     const currentUserLogs = logs?.filter(log => log.userId === user?.id)
 
@@ -56,7 +52,7 @@ function progress({ logs, exercises }: { logs: NewUserLog[], exercises: Exercise
     )
 }
 
-export default progress
+export default Progress
 
 export const getServerSideProps = withPageAuth({
     redirectTo: '/login',

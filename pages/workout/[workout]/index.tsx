@@ -11,17 +11,16 @@ import { ExerciseWithSets } from "../../../types";
 
 function Workout({ currentExercises }: { currentExercises: ExerciseWithSets[] }) {
     const { user } = useUser()
-    const [open, setOpen] = useState(true)
+    const [open, setOpen] = useState(false)
     const router = useRouter()
 
     useEffect(() => {
         if (user === null) {
-            router.push('/login')
+            setOpen(true)
+        } else {
+            setOpen(false)
         }
-        //     if (user === null) {
-        //         setOpen(true)
-        //     } else { setOpen(false) }
-        // 
+
     },
         [user]
     )
@@ -34,7 +33,7 @@ function Workout({ currentExercises }: { currentExercises: ExerciseWithSets[] })
                     <main className='flex-1 bg-slate-200 h-screen'>
                         <div className='py-6'>
                             <div className='mx-auto max-w-7xl px-4 sm:px-6 md:px-8'>
-                                {/* <LoginModal open={open} setOpen={setOpen} /> */}
+                                <LoginModal open={open} setOpen={setOpen} />
                             </div>
                             <div className='mx-auto max-w-7xl px-4 sm:px-6 md:px-8'>
                                 <ExercisesSection currentExercises={currentExercises} />
@@ -50,7 +49,6 @@ function Workout({ currentExercises }: { currentExercises: ExerciseWithSets[] })
 export default Workout;
 
 export async function getStaticPaths() {
-    console.log("hi")
     const workouts = await prisma.workout.findMany();
     const paths = workouts.map((item) => ({
         params: { workout: item.id.toString() },

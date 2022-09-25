@@ -116,7 +116,7 @@ const WorkoutHistory = ({
               <h5 className='mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-900'>
                 {item.exercise}
               </h5>
-              {item.logs.map(item2 =>
+              {item.logs.map((item2: any) =>
                 new Date(item2.createdAt).getDate() === selectedDay.getDate() && new Date(item2.createdAt).getMonth() === selectedDay.getMonth() &&
                 <p className='font-normal text-gray-700 dark:text-gray-600'>
                   {item2.reps} reps - {item2.weights} kg

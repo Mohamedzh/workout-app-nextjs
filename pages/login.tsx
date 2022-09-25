@@ -1,22 +1,30 @@
 import { NextPage } from "next";
-import React from "react";
+import React, { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from 'yup'
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { loginUser, signOut } from "../lib/functions";
-import { User } from "@supabase/auth-helpers-nextjs";
+import { useUser } from "@supabase/auth-helpers-react";
 
 
-const login: NextPage = ({ user }: { user?: User }) => {
+const Login: NextPage = () => {
   const router = useRouter()
+  const { user, error } = useUser()
+
+  const [show, setShow] = useState<boolean>(false)
+  const [loginError, setError] = useState<string>('')
   const formik = useFormik({
     initialValues: {
       email: "",
       password: "",
     },
-    onSubmit: (values) => {
-      loginUser(router, values.email, values.password)
+    onSubmit: async (values) => {
+      const res: any = await loginUser(router, values.email, values.password)
+      if (!res?.id) {
+        setError(res?.message)
+        setShow(true)
+      }
     },
     validationSchema: Yup.object({
       email: Yup.string().required("Please enter your email address"),
@@ -27,7 +35,7 @@ const login: NextPage = ({ user }: { user?: User }) => {
   return (
     <>
       <div className='flex min-h-full h-screen'>
-        {!user ?
+        {user === null ?
           <div className='flex flex-1 flex-col justify-center py-12 px-4 sm:px-6 lg:flex-none lg:px-20 xl:px-24'>
             <div className='mx-auto w-full max-w-sm lg:w-96'>
               <div>
@@ -45,7 +53,7 @@ const login: NextPage = ({ user }: { user?: User }) => {
                     <a
                       className='font-medium text-gray-900 hover:text-indigo-900'
                     >
-                      create new account
+                      create a new account
                     </a>
                   </Link>
                 </p>
@@ -99,7 +107,7 @@ const login: NextPage = ({ user }: { user?: User }) => {
                         {formik.touched.password && formik.errors.password ? <p className="text-red-500 text-sm">{formik.errors.password}</p> : null}
                       </div>
                     </div>
-
+                    {show && <p className="text-red-500 text-sm">{loginError}</p>}
                     <div>
                       <button
                         type='button'
@@ -108,6 +116,14 @@ const login: NextPage = ({ user }: { user?: User }) => {
                       >
                         Sign in
                       </button>
+                      <p className="cursor-pointer mt-3" onClick={() => setShow(true)}>
+                        <Link href="/resetpassword">
+                          <a>
+                            Forgot your password?
+                          </a>
+                        </Link>
+                      </p>
+
                     </div>
                   </form>
                 </div>
@@ -121,11 +137,16 @@ const login: NextPage = ({ user }: { user?: User }) => {
             </h1>
             <div><button
               className='bg-gray-900 flex w-full justify-center rounded-md border border-transparent py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2'
-              onClick={() => signOut(router)}>Sign Out</button></div>
-            <div><button
-              className='bg-gray-900 flex w-full justify-center rounded-md border border-transparent py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2'
-              onClick={() => router.push('/')}>Return to your dashboard
+              onClick={() => signOut(router)}>
+              Sign Out
             </button>
+            </div>
+            <div>
+              <button
+                className='bg-gray-900 flex w-full justify-center rounded-md border border-transparent py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2'
+                onClick={() => router.push('/')}>
+                Return to your dashboard
+              </button>
             </div>
           </div>
         }
@@ -141,4 +162,4 @@ const login: NextPage = ({ user }: { user?: User }) => {
   );
 };
 
-export default login;
+export default Login;

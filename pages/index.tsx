@@ -1,15 +1,15 @@
-import { Exercise, UserLog, WorkoutLine } from '@prisma/client'
-import { User, withPageAuth } from '@supabase/auth-helpers-nextjs'
+import { Exercise, WorkoutLine } from '@prisma/client'
+import { supabaseClient, User, withPageAuth } from '@supabase/auth-helpers-nextjs'
 import { useUser } from '@supabase/auth-helpers-react'
 import type { NextPage } from 'next'
+import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
 import Charts from '../components/charts'
 import Dashboard from '../components/dashboard'
 import Layout from '../components/layout'
 import { prisma } from '../db'
 import { getPersonalRecords } from '../lib/functions'
-import { NewUserLog, PersonalDailyRecords } from '../types'
+import { NewUserLog } from '../types'
 
 
 const Home: NextPage = ({ exercises, logs, user, lines }: {
@@ -18,10 +18,18 @@ const Home: NextPage = ({ exercises, logs, user, lines }: {
     user?: User,
     lines?: WorkoutLine[]
 }) => {
+    const router = useRouter()
+    useEffect(() => {
+        supabaseClient.auth.onAuthStateChange(async (event, session) => {
+            if (event == 'PASSWORD_RECOVERY') {
+                router.push('/newpassprompt')
+            }
+        })
+    }, [])
+
+
     const userName = user?.user_metadata.name
     const userLogs = logs?.filter(line => line.userId === user?.id)
-
-    console.log(userLogs)
 
     let userDays: number[] = []
     userLogs?.map(log => {
@@ -42,7 +50,7 @@ const Home: NextPage = ({ exercises, logs, user, lines }: {
     const [favoriteExercises, setFavorite] = useState<string[]>(['Squat', 'Bicep Curl', 'Bench Press', 'Overhead Press'])
 
 
-    const favoriteGraphs = getPersonalRecords(userDays, exerciseNames, newLogs)
+    const favoriteGraphs = getPersonalRecords(userDays, exerciseNames!, newLogs!)
         .filter(item => favoriteExercises.find(one => one === item.name))
 
     const userNums = userLogs?.map(log => {
@@ -66,8 +74,6 @@ const Home: NextPage = ({ exercises, logs, user, lines }: {
             personalBestRecords.push({ name: exerciseNames[i].name, weight: Math.max(...exerciseRecord), color: exerciseNames[i].color })
         }
     }
-
-    console.log(personalBestRecords)
 
     return (
         <>

@@ -114,7 +114,7 @@ export default function LoginModal({
                                                     >
                                                         Sign in
                                                     </button>
-                                                    <p className='mt-3'>Don't have an account? <Link href="/signup"><a className='underline'>Sign up</a></Link></p>
+                                                    <p className="mt-3">Don&apos;t have an account? <Link href="/signup"><a className="underline">Sign up</a></Link></p>
                                                 </div>
                                             </form>
                                         </div>
