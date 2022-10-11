@@ -1,5 +1,5 @@
 import { NextPage } from "next";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from 'yup'
 import { useRouter } from "next/router";
@@ -10,8 +10,7 @@ import { useUser } from "@supabase/auth-helpers-react";
 
 const Login: NextPage = () => {
   const router = useRouter()
-  const { user, error } = useUser()
-
+  const { user, isLoading } = useUser()
   const [show, setShow] = useState<boolean>(false)
   const [loginError, setError] = useState<string>('')
   const formik = useFormik({
@@ -25,6 +24,8 @@ const Login: NextPage = () => {
         setError(res?.message)
         setShow(true)
       }
+      // else {router.push("/");console.log(res.id);
+      // }
     },
     validationSchema: Yup.object({
       email: Yup.string().required("Please enter your email address"),
@@ -131,12 +132,12 @@ const Login: NextPage = () => {
             </div>
           </div>
           :
-          <div>
+          <div className="p-5 flex flex-col justify-center">
             <h1>
               You are already loggedIn as user {user?.email}
             </h1>
             <div><button
-              className='bg-gray-900 flex w-full justify-center rounded-md border border-transparent py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2'
+              className='bg-gray-900 flex w-full justify-center rounded-md border border-transparent py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 my-5'
               onClick={() => signOut(router)}>
               Sign Out
             </button>
