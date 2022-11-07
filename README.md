@@ -1,34 +1,48 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Workout Web App
 
-## Getting Started
+![Homepage](/public/workout2.png)
+## Table of contents
+* [General info](#general-info)
+* [Technologies](#technologies)
+* [Setup](#setup)
 
-First, run the development server:
+## General info
+A web app for workouts where users can choose from different workouts, log their exercises and monitor their progress for each exercise using graphs.
+## Technologies
+* React version: 18.2.0
+* Next version: 12.3.1
+* Typescript version:4.8.4
+* TailwindCSS version: 3.1.8
+* Redux toolkit version: 1.8.5
+* Formik version: 2.2.9
+* Axios version: 0.27.2
+* Prisma version: 4.3.1
+* React-chartjs-2 version: 4.3.1
+*date-fns version: 2.29.3
 
-```bash
-npm run dev
-# or
-yarn dev
+## Functionalities
+* View different workouts and exercises for each workout with recommended sets, reps and weights for each one.
+* Log exercises with user-defined sets, reps and weights, along with a timer for plank and similar exercises.
+* User dashboard showing the best achieved weight for favorite  exercises along with progress graphs.
+* History calendar showing the activity history for chosen day.
+* Progress page showing progress graphs for every exercise the user has played.
+## Setup
+To run this project:
+* You'll need to provide a .env file with the following variables:
+DATABASE_URL: database connection string
+**(User authentication is based on supabase auth so you'll need to create a supabase database and use its API credentials to connect to the user auth tables in your database )
+NEXT_PUBLIC_SUPABASE_URL
+NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+* Install it locally using npm:
 ```
+npm install
+npm run dev
+```
+Or you can view a live example on vercel [Here](https://workout-app-nextjs-6q67.vercel.app)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+![Dashboard](/public/workout1.png.png)
+![Progress Page](/public/workout3.png)
+![Sign-up page](/public/workoutsignup.png)
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.

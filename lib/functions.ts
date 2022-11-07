@@ -80,7 +80,10 @@ export const getExerciseData = (exercise: string, personalBestRecords: PersonalD
         let target = currentExercise?.days.find(log => log === i)
         if (target) {
             graphData.push(currentExercise?.weights[currentExercise?.days.indexOf(i)])
-        } else graphData.push(0)
+        } else if (i < new Date().getDate()) {
+            graphData.push(0)
+        }
+        // else graphData.push(0)
     }
     data = {
         chartData: {
