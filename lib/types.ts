@@ -1,4 +1,6 @@
 import { Exercise, UserLog, Workout, WorkoutLine } from "@prisma/client"
+import { number } from "yup"
+import { string } from "yup/lib/locale"
 
 
 export interface Navigation {
@@ -50,3 +52,9 @@ export interface PersonalRecords {
   weight: number
 }
  
+export interface WorkoutLogs {
+  exercise:string
+  createdAt: Date
+  weight:number
+  reps:number
+}

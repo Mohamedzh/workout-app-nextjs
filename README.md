@@ -8,9 +8,10 @@
 
 ## General info
 A web app for workouts where users can choose from different workouts, log their exercises and monitor their progress for each exercise using graphs.
+
 ## Technologies
-* React version: 18.2.0
-* Next version: 12.3.1
+* React.js version: 18.2.0
+* Next.js version: 12.3.1
 * Typescript version:4.8.4
 * TailwindCSS version: 3.1.8
 * Redux toolkit version: 1.8.5
@@ -18,7 +19,7 @@ A web app for workouts where users can choose from different workouts, log their
 * Axios version: 0.27.2
 * Prisma version: 4.3.1
 * React-chartjs-2 version: 4.3.1
-*date-fns version: 2.29.3
+* date-fns version: 2.29.3
 
 ## Functionalities
 * View different workouts and exercises for each workout with recommended sets, reps and weights for each one.

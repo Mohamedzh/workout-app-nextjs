@@ -1,6 +1,6 @@
 import { getUser } from "@supabase/auth-helpers-nextjs";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { prisma } from "../../db/index";
+import { prisma } from "../../lib/db/index";
 
 export default async function sendUserLog(req: NextApiRequest, res: NextApiResponse) {
     try {
